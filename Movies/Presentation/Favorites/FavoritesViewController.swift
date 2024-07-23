@@ -8,9 +8,8 @@
 import UIKit
 
 class FavoritesViewController: UIViewController, UISearchResultsUpdating {
-
     let searchController = UISearchController()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Favorites"
@@ -23,8 +22,8 @@ class FavoritesViewController: UIViewController, UISearchResultsUpdating {
         definesPresentationContext = true
         searchController.isActive = true
     }
-    
+
     func updateSearchResults(for searchController: UISearchController) {
-        
+
     }
 }

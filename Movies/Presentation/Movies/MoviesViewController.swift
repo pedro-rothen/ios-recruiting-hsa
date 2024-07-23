@@ -9,7 +9,7 @@ import UIKit
 
 class MoviesViewController: UIViewController, UISearchResultsUpdating {
     let searchController = UISearchController()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Movies"
@@ -21,11 +21,11 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
         definesPresentationContext = true
         searchController.isActive = true
     }
-    
+
     func updateSearchResults(for searchController: UISearchController) {
-        
+
     }
-    
+
     @IBAction func pushDetail(_ sender: Any) {
         let destination = FavoritesViewController()
         destination.hidesBottomBarWhenPushed = true
