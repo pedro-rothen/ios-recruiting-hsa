@@ -18,7 +18,7 @@ class MovieServiceImpl: MovieService {
 
     func fetchMovies(page: Int) -> AnyPublisher<[Movie], any Error> {
         var urlComponents = URLComponents(string: baseUrl)
-        urlComponents?.path = "movie/popular"
+        urlComponents?.path += "movie/popular"
         urlComponents?.queryItems = [
             URLQueryItem(name: "page", value: "\(page)")
         ]
@@ -30,16 +30,22 @@ class MovieServiceImpl: MovieService {
 
         return session.dataTaskPublisher(request: request)
             .mapError { MovieServiceError.networkError($0) }
-            .map(\.data)
+            .map { data, response in
+                #if DEBUG
+                print(data)
+                print(response)
+                #endif
+                return data
+            }
             .decode(type: MovieResponse.self, decoder: JSONDecoder())
             .mapError { MovieServiceError.decodingError($0) }
-            .map { $0.result }
+            .map { $0.results }
             .eraseToAnyPublisher()
     }
 
     func fetchGenres() -> AnyPublisher<[Genre], any Error> {
         var urlComponents = URLComponents(string: baseUrl)
-        urlComponents?.path = "genre/movie/list"
+        urlComponents?.path += "genre/movie/list"
         guard let url = urlComponents?.url else {
             return Fail(error: MovieServiceError.badUrl).eraseToAnyPublisher()
         }

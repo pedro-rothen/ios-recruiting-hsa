@@ -11,7 +11,7 @@ import Combine
 class MoviesViewController: UIViewController, UISearchResultsUpdating {
     let searchController = UISearchController()
     let viewModel: MoviesViewModel
-    let cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
 
     init(viewModel: MoviesViewModel) {
         self.viewModel = viewModel
@@ -37,7 +37,16 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
     }
 
     func setupBinding() {
-        
+        viewModel.$movies.sink(receiveCompletion: { completion in
+            switch completion {
+            case .finished:
+                break
+            case .failure(let failure):
+                print(failure)
+            }
+        }) {
+            print($0)
+        }.store(in: &cancellables)
     }
 
     func updateSearchResults(for searchController: UISearchController) {
@@ -54,16 +63,29 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
 class MoviesViewModel {
     @Published var movies = [Movie]()
     private let getMoviesUseCase: GetMoviesUseCase
+    var cancellables = Set<AnyCancellable>()
 
     init(getMoviesUseCase: GetMoviesUseCase) {
         self.getMoviesUseCase = getMoviesUseCase
     }
 
     func getMovies() {
+//        getMoviesUseCase
+//            .execute(page: 1)
+//            .receive(on: DispatchQueue.main)
+//            .replaceError(with: [])
+//            .assign(to: &$movies)
         getMoviesUseCase
             .execute(page: 1)
-            .receive(on: DispatchQueue.main)
-            .replaceError(with: [])
-            .assign(to: &$movies)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let failure):
+                    print(failure)
+                }
+            }) {
+                print($0)
+            }.store(in: &cancellables)
     }
 }
