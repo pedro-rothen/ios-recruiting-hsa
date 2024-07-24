@@ -7,11 +7,18 @@
 
 import UIKit
 import Combine
+import Kingfisher
 
 class MoviesViewController: UIViewController, UISearchResultsUpdating {
+    @IBOutlet weak var moviesCollectionView: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var labelNoResults: UILabel!
+    @IBOutlet weak var buttonRetry: UIButton!
+
     let searchController = UISearchController()
     let viewModel: MoviesViewModel
     var cancellables = Set<AnyCancellable>()
+    let movieCellId = "cell"
 
     init(viewModel: MoviesViewModel) {
         self.viewModel = viewModel
@@ -33,20 +40,22 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
         definesPresentationContext = true
         searchController.isActive = true
 
+        moviesCollectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: movieCellId)
+        moviesCollectionView.dataSource = self
+        moviesCollectionView.delegate = self
+
+        setupBindings()
+
         viewModel.getMovies()
     }
 
-    func setupBinding() {
-        viewModel.$movies.sink(receiveCompletion: { completion in
-            switch completion {
-            case .finished:
-                break
-            case .failure(let failure):
-                print(failure)
-            }
-        }) {
-            print($0)
-        }.store(in: &cancellables)
+    func setupBindings() {
+        viewModel
+            .$movies
+            .dropFirst()
+            .sink { [weak self] _ in
+                self?.moviesCollectionView.reloadData()
+            }.store(in: &cancellables)
     }
 
     func updateSearchResults(for searchController: UISearchController) {
@@ -60,23 +69,68 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
     }
 }
 
+extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.movies?.count ?? 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, 
+                        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: movieCellId,
+            for: indexPath
+        ) as? MovieCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        if let movie = viewModel.movies?[safe: indexPath.row], 
+            let url = URL(string: Constants.MOVIEDBIMAGEURL + "\(movie.posterPath)") {
+            cell.posterImageView.kf.setImage(with: url)
+            cell.titleLabel.text = movie.title
+        }
+        return cell
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        let width = collectionView.bounds.width / 2
+        let height = width * 1.2
+        return CGSize(width: width, height: height)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        0
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        0
+    }
+}
+
 class MoviesViewModel {
-    @Published var movies = [Movie]()
     private let getMoviesUseCase: GetMoviesUseCase
     var cancellables = Set<AnyCancellable>()
+
+    @Published var movies: [Movie]?
 
     init(getMoviesUseCase: GetMoviesUseCase) {
         self.getMoviesUseCase = getMoviesUseCase
     }
 
     func getMovies() {
-//        getMoviesUseCase
-//            .execute(page: 1)
-//            .receive(on: DispatchQueue.main)
-//            .replaceError(with: [])
-//            .assign(to: &$movies)
         getMoviesUseCase
             .execute(page: 1)
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -84,8 +138,14 @@ class MoviesViewModel {
                 case .failure(let failure):
                     print(failure)
                 }
-            }) {
-                print($0)
-            }.store(in: &cancellables)
+            }, receiveValue: { [weak self] in
+                self?.movies = $0
+            }).store(in: &cancellables)
+    }
+}
+
+extension Array {
+    subscript(safe index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }
