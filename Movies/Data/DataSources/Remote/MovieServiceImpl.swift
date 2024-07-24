@@ -57,7 +57,7 @@ class MovieServiceImpl: MovieService {
 
     private func request(for url: URL) -> URLRequest {
         var request = URLRequest(url: url)
-        request.setValue(Constants.MOVIEDB_TOKEN, forHTTPHeaderField: "Authorization")
+        request.setValue(Constants.MOVIEDBTOKEN, forHTTPHeaderField: "Authorization")
         return request
     }
 }
@@ -70,16 +70,10 @@ enum MovieServiceError: Error {
 
 
 public protocol URLSessionProtocol {
-    func dataTaskPublisher(url: URL) -> AnyPublisher<(data: Data, response: URLResponse), URLError>
     func dataTaskPublisher(request: URLRequest) -> AnyPublisher<(data: Data, response: URLResponse), URLError>
 }
 
 extension URLSession: URLSessionProtocol {
-    public func dataTaskPublisher(url: URL) -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
-        return dataTaskPublisher(for: url)
-            .eraseToAnyPublisher()
-    }
-
     public func dataTaskPublisher(request: URLRequest) -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
         return dataTaskPublisher(for: request)
             .eraseToAnyPublisher()

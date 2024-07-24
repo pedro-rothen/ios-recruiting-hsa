@@ -10,10 +10,11 @@ import Combine
 
 class MovieRepositoryImpl: MovieRepository {
     let remoteDataSource: MovieService
-    //let localDataSource
+    let localDataSource: FavoriteMovieLocalDataSource
 
-    init(remoteDataSource: MovieService) {
+    init(remoteDataSource: MovieService, localDataSource: FavoriteMovieLocalDataSource) {
         self.remoteDataSource = remoteDataSource
+        self.localDataSource = localDataSource
     }
 
     func fetchMovies(page: Int) -> AnyPublisher<[Movie], Error> {
@@ -25,14 +26,19 @@ class MovieRepositoryImpl: MovieRepository {
     }
 
     func fetchFavorites() -> AnyPublisher<[Movie], Error> {
-        return Just([]).setFailureType(to: Error.self).eraseToAnyPublisher()
+        return localDataSource
+            .fetchFavorites()
+            .map {
+                $0.compactMap { $0.toDomain }
+            }
+            .eraseToAnyPublisher()
     }
 
     func addFavorite(movie: Movie) -> AnyPublisher<Void, Error> {
-        return Just(()).setFailureType(to: Error.self).eraseToAnyPublisher()
+        return localDataSource.addFavorite(movie: movie).eraseToAnyPublisher()
     }
 
     func deleteFavorite(movie: Movie) -> AnyPublisher<Void, Error> {
-        return Just(()).setFailureType(to: Error.self).eraseToAnyPublisher()
+        return localDataSource.deleteFavorite(movie: movie).eraseToAnyPublisher()
     }
 }

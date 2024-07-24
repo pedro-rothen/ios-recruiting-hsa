@@ -8,7 +8,6 @@
 import Foundation
 
 struct Constants {
-    static let MOVIEDB_TOKEN = """
-    Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3N2M3YWNlOWZhNTcyZTJmY2ZlYjY3YTU0NzQyMWI4NCIsIm5iZiI6MTcyMTc1MjQwOS43NTYxMTEsInN1YiI6IjY2OWIyMWZlMGQwZmE1OWJkYjliYzEwMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.UPJ6gIO-UhouD6ykW3y70o_Oi_Z1iYaWoBZPazM-fh8
-    """
+    // swiftlint:disable:next line_length
+    static let MOVIEDBTOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3N2M3YWNlOWZhNTcyZTJmY2ZlYjY3YTU0NzQyMWI4NCIsIm5iZiI6MTcyMTc1MjQwOS43NTYxMTEsInN1YiI6IjY2OWIyMWZlMGQwZmE1OWJkYjliYzEwMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.UPJ6gIO-UhouD6ykW3y70o_Oi_Z1iYaWoBZPazM-fh8"
 }

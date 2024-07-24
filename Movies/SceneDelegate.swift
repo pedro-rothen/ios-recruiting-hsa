@@ -18,7 +18,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
 
-        let moviesViewController = UINavigationController(rootViewController: MoviesViewController())
+        let movieRemoteDataSource = MovieServiceImpl()
+        let movieLocalDataSource = FavoriteMovieLocalDataSourceImpl()
+        let movieRepository = MovieRepositoryImpl(remoteDataSource: movieRemoteDataSource, localDataSource: movieLocalDataSource)
+        let getMoviesUseCase = GetMoviesUseCaseImpl(moviesRepository: movieRepository)
+        let moviesViewModel = MoviesViewModel(getMoviesUseCase: getMoviesUseCase)
+        let moviesViewController = UINavigationController(
+            rootViewController: MoviesViewController(
+                viewModel: moviesViewModel
+            )
+        )
+
         moviesViewController.tabBarItem = UITabBarItem(title: "Movies", image: nil, tag: 0)
         let favoritesViewController = UINavigationController(rootViewController: FavoritesViewController())
         favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: nil, tag: 0)
