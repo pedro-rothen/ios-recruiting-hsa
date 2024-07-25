@@ -12,4 +12,5 @@ protocol FavoriteMovieLocalDataSource {
     func fetchFavorites() -> AnyPublisher<[FavoriteMovieEntity], Error>
     func addFavorite(movie: Movie) -> AnyPublisher<Void, Error>
     func deleteFavorite(movie: Movie) -> AnyPublisher<Void, Error>
+    func isFavorite(movie: Movie) -> AnyPublisher<Bool, Error>
 }

@@ -60,6 +60,19 @@ class FavoriteMovieLocalDataSourceImpl: FavoriteMovieLocalDataSource {
             }
         }.eraseToAnyPublisher()
     }
+
+    func isFavorite(movie: Movie) -> AnyPublisher<Bool, any Error> {
+        return Future { [unowned self] promise in
+            do {
+                let fetchRequest = FavoriteMovieEntity.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "id == %d", movie.id)
+                let results = try context.count(for: fetchRequest)
+                return promise(.success(results > 0))
+            } catch {
+                return promise(.failure(error))
+            }
+        }.eraseToAnyPublisher()
+    }
 }
 
 enum FavoriteMovieLocalDataSourceError: Error {

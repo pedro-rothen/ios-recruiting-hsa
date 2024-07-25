@@ -22,15 +22,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let movieLocalDataSource = FavoriteMovieLocalDataSourceImpl()
         let movieRepository = MovieRepositoryImpl(remoteDataSource: movieRemoteDataSource, localDataSource: movieLocalDataSource)
         let getMoviesUseCase = GetMoviesUseCaseImpl(moviesRepository: movieRepository)
-        let moviesViewModel = MoviesViewModel(getMoviesUseCase: getMoviesUseCase)
+        let getFavoritesUseCase = GetFavoritesUseCaseImpl(movieRepository: movieRepository)
+        let deleteFavoriteUseCase = DeleteFavoriteUseCaseImpl(movieRepository: movieRepository)
+        let addFavoriteUseCase = AddFavoriteUseCaseImpl(movieRepository: movieRepository)
+        let isFavoriteUseCase = IsFavoriteMovieUseCaseImpl(movieRepository: movieRepository)
+        let moviesViewModel = MoviesViewModel(
+            getMoviesUseCase: getMoviesUseCase,
+            addFavoriteUseCase: addFavoriteUseCase,
+            deleteFavoriteUseCase: deleteFavoriteUseCase,
+            isFavoriteMovieUseCase: isFavoriteUseCase
+        )
         let moviesViewController = UINavigationController(
             rootViewController: MoviesViewController(
                 viewModel: moviesViewModel
             )
         )
-
         moviesViewController.tabBarItem = UITabBarItem(title: "Movies", image: nil, tag: 0)
-        let favoritesViewController = UINavigationController(rootViewController: FavoritesViewController())
+        let favoriteViewModel = FavoriteViewModel(getFavoritesUseCase: getFavoritesUseCase, deleteFavoriteUseCase: deleteFavoriteUseCase)
+        let favoritesViewController = UINavigationController(rootViewController: FavoritesViewController(viewModel: favoriteViewModel))
         favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: nil, tag: 0)
         let tabsController = UITabBarController()
         tabsController.viewControllers = [

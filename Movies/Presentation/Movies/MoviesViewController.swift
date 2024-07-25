@@ -53,6 +53,7 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
         viewModel
             .$movies
             .dropFirst()
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.moviesCollectionView.reloadData()
             }.store(in: &cancellables)
@@ -63,9 +64,9 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
     }
 
     @IBAction func pushDetail(_ sender: Any) {
-        let destination = FavoritesViewController()
-        destination.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(destination, animated: true)
+//        let destination = FavoritesViewController()
+//        destination.hidesBottomBarWhenPushed = true
+//        navigationController?.pushViewController(destination, animated: true)
     }
 }
 
@@ -87,6 +88,11 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
             let url = URL(string: Constants.MOVIEDBIMAGEURL + "\(movie.posterPath)") {
             cell.posterImageView.kf.setImage(with: url)
             cell.titleLabel.text = movie.title
+            cell.toggleFavoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            cell.delegate = self
+            viewModel.isFavorite(movie: movie) { [weak cell] isFavorite in
+                cell?.bindFavoriteIcon(isFavorite: isFavorite)
+            }
         }
         return cell
     }
@@ -117,14 +123,34 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 }
 
+extension MoviesViewController: MovieCollectionViewCellDelegate {
+    func toggleFavorite(for cell: MovieCollectionViewCell) {
+        if let indexPath = moviesCollectionView.indexPath(for: cell),
+           let movie = viewModel.movies?[safe: indexPath.row] {
+            viewModel.toggleFavorite(for: movie) { [weak cell] isFavorite in
+                cell?.bindFavoriteIcon(isFavorite: isFavorite)
+            }
+        }
+    }
+}
+
 class MoviesViewModel {
     private let getMoviesUseCase: GetMoviesUseCase
+    private let addFavoriteUseCase: AddFavoriteUseCase
+    private let deleteFavoriteUseCase: DeleteFavoriteUseCase
+    private let isFavoriteMovieUseCase: IsFavoriteMovieUseCase
     var cancellables = Set<AnyCancellable>()
 
     @Published var movies: [Movie]?
 
-    init(getMoviesUseCase: GetMoviesUseCase) {
+    init(getMoviesUseCase: GetMoviesUseCase,
+         addFavoriteUseCase: AddFavoriteUseCase,
+         deleteFavoriteUseCase: DeleteFavoriteUseCase,
+         isFavoriteMovieUseCase: IsFavoriteMovieUseCase) {
         self.getMoviesUseCase = getMoviesUseCase
+        self.addFavoriteUseCase = addFavoriteUseCase
+        self.deleteFavoriteUseCase = deleteFavoriteUseCase
+        self.isFavoriteMovieUseCase = isFavoriteMovieUseCase
     }
 
     func getMovies() {
@@ -140,6 +166,35 @@ class MoviesViewModel {
                 }
             }, receiveValue: { [weak self] in
                 self?.movies = $0
+            }).store(in: &cancellables)
+    }
+
+    func isFavorite(movie: Movie, completion: @escaping (Bool) ->()) {
+        isFavoriteMovieUseCase
+            .execute(movie: movie)
+            .replaceError(with: false)
+            .map { $0 }
+            .sink {
+                completion($0)
+            }.store(in: &cancellables)
+    }
+
+    func toggleFavorite(for movie: Movie, completion: @escaping (Bool) -> ()) {
+        var newValue = false
+        isFavoriteMovieUseCase
+            .execute(movie: movie)
+            .flatMap { [deleteFavoriteUseCase, addFavoriteUseCase] isFavorite in
+                newValue = !isFavorite
+                return isFavorite ? deleteFavoriteUseCase.execute(movie: movie) : addFavoriteUseCase.execute(movie: movie)
+            }.sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let failure):
+                    print(failure)
+                }
+            }, receiveValue: {
+                completion(newValue)
             }).store(in: &cancellables)
     }
 }

@@ -41,4 +41,8 @@ class MovieRepositoryImpl: MovieRepository {
     func deleteFavorite(movie: Movie) -> AnyPublisher<Void, Error> {
         return localDataSource.deleteFavorite(movie: movie).eraseToAnyPublisher()
     }
+
+    func isFavorite(movie: Movie) -> AnyPublisher<Bool, Error> {
+        return localDataSource.isFavorite(movie: movie)
+    }
 }
