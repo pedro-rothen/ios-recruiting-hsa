@@ -18,6 +18,23 @@ class MovieDetailViewController: UIViewController {
         imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: 16/9).isActive = true
         return imageView
     }()
+    var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.numberOfLines = 0
+        return label
+    }()
+    var releaseYearLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 18, weight: .medium)
+        return label
+    }()
+    var overviewLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 18, weight: .regular)
+        label.numberOfLines = 0
+        return label
+    }()
 
     let movie: Movie
     let getGenresUseCase: GetGenresUseCase
@@ -35,7 +52,8 @@ class MovieDetailViewController: UIViewController {
     override func loadView() {
         super.loadView()
         self.view = UIView()
-        
+        view.backgroundColor = .white
+
         contentScrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(contentScrollView)
         NSLayoutConstraint.activate([
@@ -62,8 +80,15 @@ class MovieDetailViewController: UIViewController {
 
         let contentStackView = UIStackView()
         contentStackView.axis = .vertical
+        contentStackView.spacing = 10
+        let margin = 10.0
+        contentStackView.layoutMargins = UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin)
+        contentStackView.isLayoutMarginsRelativeArrangement = true
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
         contentStackView.addArrangedSubview(posterImageView)
+        contentStackView.addArrangedSubview(titleLabel)
+        contentStackView.addArrangedSubview(releaseYearLabel)
+        contentStackView.addArrangedSubview(overviewLabel)
         scrollableContentView.addSubview(contentStackView)
 
         NSLayoutConstraint.activate([
@@ -76,9 +101,15 @@ class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind(movie: movie)
+    }
 
+    func bind(movie: Movie) {
         if let url = URL(string: Constants.MOVIEDBIMAGEURL + "\(movie.posterPath)") {
             posterImageView.kf.setImage(with: url)
         }
+        titleLabel.text = movie.title
+        releaseYearLabel.text = movie.releaseDate
+        overviewLabel.text = movie.overview
     }
 }

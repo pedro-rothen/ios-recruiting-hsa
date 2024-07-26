@@ -18,10 +18,20 @@ class MovieCollectionViewCell: UICollectionViewCell {
     }()
     var titleLabel = {
         let label = UILabel()
-        label.textAlignment = .center
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 18, weight: .medium)
+        label.numberOfLines = 0
+        label.textAlignment = .left
+        // ImageView pushing down label after layout pass, making it one liner
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
         return label
     }()
-    let toggleFavoriteButton = UIButton()
+    var toggleFavoriteButton: UIButton = {
+        let button = UIButton()
+        button.tintColor = .yellow
+        button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        return button
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,7 +43,6 @@ class MovieCollectionViewCell: UICollectionViewCell {
     }
 
     func setupViews() {
-        toggleFavoriteButton.tintColor = .yellow
         toggleFavoriteButton.addTarget(
             self,
             action: #selector(toggleFavoriteButtonTapped),
@@ -44,7 +53,15 @@ class MovieCollectionViewCell: UICollectionViewCell {
             toggleFavoriteButton
         ])
         detailStack.axis = .horizontal
-        detailStack.backgroundColor = .gray
+        detailStack.backgroundColor = .darkGray
+        let detailMargin = 5.0
+        detailStack.layoutMargins = UIEdgeInsets(
+            top: detailMargin, 
+            left: detailMargin,
+            bottom: detailMargin,
+            right: detailMargin
+        )
+        detailStack.isLayoutMarginsRelativeArrangement = true
         let stackView = UIStackView(arrangedSubviews: [
             posterImageView,
             detailStack
@@ -67,7 +84,6 @@ class MovieCollectionViewCell: UICollectionViewCell {
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        // stackView.backgroundColor = [UIColor.red, UIColor.blue, UIColor.green].randomElement()
     }
 
     @objc

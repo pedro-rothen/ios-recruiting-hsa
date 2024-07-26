@@ -33,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         /// Bear with me, MoviesViewController and FavoritesViewController needs to
         /// handle their own navigation in order to use the navigation search bar.
-        /// Thought about an intermediate VC to handle and pass the queries but felt hacky.
+        /// Thought about an intermediate VC to handle and pass the queries but it felt hacky.
         let moviesCoordinator = MoviesCoordinator(
             navigationController: UINavigationController(),
             getMoviesUseCase: getMoviesUseCase,

@@ -33,7 +33,7 @@ class FavoritesCoordinator: Coordinator {
             favoritesCoordinator: self
         )
         navigationController.pushViewController(favoritesViewController, animated: false)
-        navigationController.tabBarItem = UITabBarItem(title: "Favorites", image: nil, tag: 1)
+        navigationController.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "heart"), tag: 1)
     }
 
     func showMovieDetail(movie: Movie) {

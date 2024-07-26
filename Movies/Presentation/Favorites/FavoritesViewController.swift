@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import Kingfisher
 
-class FavoritesViewController: UIViewController, UISearchResultsUpdating {
+class FavoritesViewController: UIViewController {
     let viewModel: FavoriteViewModel
     let cellId = "cell"
     weak var coordinator: FavoritesCoordinator?
@@ -75,22 +75,18 @@ class FavoritesViewController: UIViewController, UISearchResultsUpdating {
 
     func setupBindings() {
         viewModel
-            .$favoritesMovies
+            .$filteredMovies
             .dropFirst()
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.favoriteMoviesTableView.reloadData()
             }.store(in: &cancellables)
     }
-
-    func updateSearchResults(for searchController: UISearchController) {
-
-    }
 }
 
 extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.favoritesMovies?.count ?? 0
+        return viewModel.filteredMovies?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -100,7 +96,7 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
         ) as? FavoriteMovieTableViewCell else {
             return UITableViewCell()
         }
-        if let movie = viewModel.favoritesMovies?[safe: indexPath.row],
+        if let movie = viewModel.filteredMovies?[safe: indexPath.row],
             let url = URL(string: Constants.MOVIEDBIMAGEURL + "\(movie.posterPath)") {
             cell.posterImageView.kf.setImage(with: url)
             cell.titleLabel.text = movie.title
@@ -116,7 +112,7 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
         forRowAt indexPath: IndexPath
     ) {
         if editingStyle == .delete {
-            if let movie = viewModel.favoritesMovies?[safe: indexPath.row] {
+            if let movie = viewModel.filteredMovies?[safe: indexPath.row] {
                 viewModel.deleteFavorite(movie: movie)
             }
         }
@@ -128,14 +124,30 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
     ) -> UITableViewCell.EditingStyle {
         .delete
     }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let movie = viewModel.filteredMovies?[indexPath.row] {
+            coordinator?.showMovieDetail(movie: movie)
+        }
+    }
+}
+
+extension FavoritesViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let query = searchController.searchBar.text else {
+            return
+        }
+        viewModel.filterMovies(query: query)
+    }
 }
 
 class FavoriteViewModel {
     private let getFavoritesUseCase: GetFavoritesUseCase
     private let deleteFavoriteUseCase: DeleteFavoriteUseCase
     private var cancellables = Set<AnyCancellable>()
+    private var movies: [Movie]?
 
-    @Published var favoritesMovies: [Movie]?
+    @Published var filteredMovies: [Movie]?
 
     init(getFavoritesUseCase: GetFavoritesUseCase, deleteFavoriteUseCase: DeleteFavoriteUseCase) {
         self.getFavoritesUseCase = getFavoritesUseCase
@@ -154,7 +166,8 @@ class FavoriteViewModel {
                     print(failure)
                 }
             }, receiveValue: { [weak self] movies in
-                self?.favoritesMovies = movies
+                self?.movies = movies
+                self?.filteredMovies = movies
             }).store(in: &cancellables)
     }
 
@@ -170,9 +183,14 @@ class FavoriteViewModel {
                 }
             }, receiveValue: { [weak self] in
                 print("Favorite movie deleted")
-                if let index = self?.favoritesMovies?.firstIndex(where: { $0.id == movie.id }) {
-                    self?.favoritesMovies?.remove(at: index)
+                if let index = self?.filteredMovies?.firstIndex(where: { $0.id == movie.id }) {
+                    self?.filteredMovies?.remove(at: index)
                 }
             }).store(in: &cancellables)
+    }
+
+    func filterMovies(query: String) {
+        filteredMovies = query.isEmpty ? movies :
+        movies?.filter { $0.title.lowercased().contains(query.lowercased()) }
     }
 }

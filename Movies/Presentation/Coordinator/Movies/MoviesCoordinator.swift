@@ -45,7 +45,7 @@ class MoviesCoordinator: Coordinator {
             moviesCoordinator: self
         )
         navigationController.pushViewController(moviesViewController, animated: false)
-        navigationController.tabBarItem = UITabBarItem(title: "Movies", image: nil, tag: 0)
+        navigationController.tabBarItem = UITabBarItem(title: "Movies", image: UIImage(systemName: "list.bullet"), tag: 0)
     }
 
     func showMovieDetail(movie: Movie) {

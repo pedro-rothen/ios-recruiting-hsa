@@ -19,18 +19,19 @@ class FavoriteMovieTableViewCell: UITableViewCell {
     }()
     var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.numberOfLines = 2
         return label
     }()
     var releaseYearLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .medium)
+        label.font = .systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     var overviewLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .regular)
-        label.numberOfLines = 3
+        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.numberOfLines = 0
         return label
     }()
 
@@ -48,17 +49,17 @@ class FavoriteMovieTableViewCell: UITableViewCell {
             posterImageView
         ])
         stackView.axis = .horizontal
-
-        let stackTitle = UIStackView(arrangedSubviews: [
-            titleLabel,
-            releaseYearLabel
-        ])
-        stackTitle.axis = .vertical
         let detailStack = UIStackView(arrangedSubviews: [
-            stackTitle,
+            titleLabel,
+            releaseYearLabel,
             overviewLabel
         ])
         detailStack.axis = .vertical
+        detailStack.spacing = 5
+        let margin = 5.0
+        stackView.layoutMargins = UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin)
+        detailStack.isLayoutMarginsRelativeArrangement = true
+
         stackView.addArrangedSubview(detailStack)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(stackView)

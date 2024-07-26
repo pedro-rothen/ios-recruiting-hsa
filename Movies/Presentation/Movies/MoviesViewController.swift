@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import Kingfisher
 
-class MoviesViewController: UIViewController, UISearchResultsUpdating {
+class MoviesViewController: UIViewController {
     @IBOutlet weak var moviesCollectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var labelNoResults: UILabel!
@@ -60,7 +60,7 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
         for cell in moviesCollectionView.visibleCells {
             if let indexPath = moviesCollectionView.indexPath(for: cell),
                let movieCell = cell as? MovieCollectionViewCell,
-               let movie = viewModel.movies?[indexPath.row] {
+               let movie = viewModel.filteredMovies?[indexPath.row] {
                 viewModel.isFavorite(movie: movie) { [weak movieCell] in
                     movieCell?.bindFavoriteIcon(isFavorite: $0)
                 }
@@ -93,22 +93,12 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
                 }
             }.store(in: &cancellables)
         viewModel
-            .$movies
+            .$filteredMovies
             .dropFirst()
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.moviesCollectionView.reloadData()
             }.store(in: &cancellables)
-    }
-
-    func updateSearchResults(for searchController: UISearchController) {
-
-    }
-
-    @IBAction func pushDetail(_ sender: Any) {
-//        let destination = FavoritesViewController()
-//        destination.hidesBottomBarWhenPushed = true
-//        navigationController?.pushViewController(destination, animated: true)
     }
 
     @IBAction func buttonRetryTapped(_ sender: Any) {
@@ -120,7 +110,7 @@ extension MoviesViewController: UICollectionViewDataSource,
                                     UICollectionViewDelegate,
                                     UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.movies?.count ?? 0
+        return viewModel.filteredMovies?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, 
@@ -132,7 +122,7 @@ extension MoviesViewController: UICollectionViewDataSource,
         ) as? MovieCollectionViewCell else {
             return UICollectionViewCell()
         }
-        if let movie = viewModel.movies?[safe: indexPath.row], 
+        if let movie = viewModel.filteredMovies?[safe: indexPath.row],
             let url = URL(string: Constants.MOVIEDBIMAGEURL + "\(movie.posterPath)") {
             cell.posterImageView.kf.setImage(with: url)
             cell.titleLabel.text = movie.title
@@ -171,16 +161,25 @@ extension MoviesViewController: UICollectionViewDataSource,
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let movie = viewModel.movies?[indexPath.row] {
+        if let movie = viewModel.filteredMovies?[indexPath.row] {
             coordinator?.showMovieDetail(movie: movie)
         }
+    }
+}
+
+extension MoviesViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let query = searchController.searchBar.text else {
+            return
+        }
+        viewModel.filterMovies(query: query)
     }
 }
 
 extension MoviesViewController: MovieCollectionViewCellDelegate {
     func toggleFavorite(for cell: MovieCollectionViewCell) {
         if let indexPath = moviesCollectionView.indexPath(for: cell),
-           let movie = viewModel.movies?[safe: indexPath.row] {
+           let movie = viewModel.filteredMovies?[safe: indexPath.row] {
             viewModel.toggleFavorite(for: movie) { [weak cell] isFavorite in
                 cell?.bindFavoriteIcon(isFavorite: isFavorite)
             }
@@ -195,7 +194,8 @@ class MoviesViewModel {
     private let isFavoriteMovieUseCase: IsFavoriteMovieUseCase
     var cancellables = Set<AnyCancellable>()
 
-    @Published var movies: [Movie]?
+    private var movies: [Movie]?
+    @Published var filteredMovies: [Movie]?
     @Published var uiState: MovieUiState = .idle
 
     init(getMoviesUseCase: GetMoviesUseCase,
@@ -224,6 +224,7 @@ class MoviesViewModel {
             }, receiveValue: { [weak self] in
                 self?.uiState = .success
                 self?.movies = $0
+                self?.filteredMovies = $0
             }).store(in: &cancellables)
     }
 
@@ -259,6 +260,11 @@ class MoviesViewModel {
             }, receiveValue: {
                 completion(newValue)
             }).store(in: &cancellables)
+    }
+
+    func filterMovies(query: String) {
+        filteredMovies = query.isEmpty ? movies :
+        movies?.filter { $0.title.lowercased().contains(query.lowercased()) }
     }
 }
 
