@@ -12,6 +12,7 @@ import Kingfisher
 class FavoritesViewController: UIViewController, UISearchResultsUpdating {
     let viewModel: FavoriteViewModel
     let cellId = "cell"
+    weak var coordinator: FavoritesCoordinator?
     let searchController = UISearchController()
     var cancellables = Set<AnyCancellable>()
     var favoriteMoviesTableView: UITableView = {
@@ -25,9 +26,10 @@ class FavoritesViewController: UIViewController, UISearchResultsUpdating {
         return label
     }()
 
-    init(viewModel: FavoriteViewModel) {
+    init(viewModel: FavoriteViewModel, favoritesCoordinator: FavoritesCoordinator) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        coordinator = favoritesCoordinator
     }
     
     required init?(coder: NSCoder) {

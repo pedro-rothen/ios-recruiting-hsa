@@ -1,5 +1,5 @@
 //
-//  MovieServiceImpl.swift
+//  MovieServiceApiImpl.swift
 //  Movies
 //
 //  Created by Pedro on 23-07-24.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class MovieServiceImpl: MovieService {
+class MovieServiceApiImpl: MovieServiceApi {
     let session: URLSessionProtocol
     private let baseUrl = "https://api.themoviedb.org/3/"
 

@@ -19,10 +19,12 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
     let viewModel: MoviesViewModel
     var cancellables = Set<AnyCancellable>()
     let movieCellId = "cell"
+    weak var coordinator: MoviesCoordinator?
 
-    init(viewModel: MoviesViewModel) {
+    init(viewModel: MoviesViewModel, moviesCoordinator: MoviesCoordinator) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        coordinator = moviesCoordinator
     }
     
     required init?(coder: NSCoder) {
@@ -114,7 +116,9 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
     }
 }
 
-extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension MoviesViewController: UICollectionViewDataSource,
+                                    UICollectionViewDelegate,
+                                    UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.movies?.count ?? 0
     }
@@ -164,6 +168,12 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
         0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let movie = viewModel.movies?[indexPath.row] {
+            coordinator?.showMovieDetail(movie: movie)
+        }
     }
 }
 

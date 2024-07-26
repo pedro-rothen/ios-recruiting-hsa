@@ -9,10 +9,10 @@ import Foundation
 import Combine
 
 class MovieRepositoryImpl: MovieRepository {
-    let remoteDataSource: MovieService
+    let remoteDataSource: MovieServiceApi
     let localDataSource: FavoriteMovieLocalDataSource
 
-    init(remoteDataSource: MovieService, localDataSource: FavoriteMovieLocalDataSource) {
+    init(remoteDataSource: MovieServiceApi, localDataSource: FavoriteMovieLocalDataSource) {
         self.remoteDataSource = remoteDataSource
         self.localDataSource = localDataSource
     }

@@ -8,46 +8,58 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
+    var mainCoordinator: MainCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
 
-        let movieRemoteDataSource = MovieServiceImpl()
+        /// Sorry about the boilerplate mate. Though about a @Injected property wrapper, 
+        /// but to keep the project as standard as possible went for manual injection.
+        let movieRemoteDataSource = MovieServiceApiImpl()
         let movieLocalDataSource = FavoriteMovieLocalDataSourceImpl()
-        let movieRepository = MovieRepositoryImpl(remoteDataSource: movieRemoteDataSource, localDataSource: movieLocalDataSource)
+        let movieRepository = MovieRepositoryImpl(
+            remoteDataSource: movieRemoteDataSource, localDataSource: movieLocalDataSource)
         let getMoviesUseCase = GetMoviesUseCaseImpl(moviesRepository: movieRepository)
+        let getGenresUseCase = GetGenresUseCaseImpl(movieRepository: movieRepository)
+
+        /// Another solution would be merge favorite operations in a FavoriteService,
+        /// and then call the repository directly. But I already did write those usecases. so anyways it's better for abstraction.
         let getFavoritesUseCase = GetFavoritesUseCaseImpl(movieRepository: movieRepository)
         let deleteFavoriteUseCase = DeleteFavoriteUseCaseImpl(movieRepository: movieRepository)
         let addFavoriteUseCase = AddFavoriteUseCaseImpl(movieRepository: movieRepository)
         let isFavoriteUseCase = IsFavoriteMovieUseCaseImpl(movieRepository: movieRepository)
-        let moviesViewModel = MoviesViewModel(
-            getMoviesUseCase: getMoviesUseCase,
-            addFavoriteUseCase: addFavoriteUseCase,
-            deleteFavoriteUseCase: deleteFavoriteUseCase,
-            isFavoriteMovieUseCase: isFavoriteUseCase
-        )
-        let moviesViewController = UINavigationController(
-            rootViewController: MoviesViewController(
-                viewModel: moviesViewModel
-            )
-        )
-        moviesViewController.tabBarItem = UITabBarItem(title: "Movies", image: nil, tag: 0)
-        let favoriteViewModel = FavoriteViewModel(getFavoritesUseCase: getFavoritesUseCase, deleteFavoriteUseCase: deleteFavoriteUseCase)
-        let favoritesViewController = UINavigationController(rootViewController: FavoritesViewController(viewModel: favoriteViewModel))
-        favoritesViewController.tabBarItem = UITabBarItem(title: "Favorites", image: nil, tag: 0)
-        let tabsController = UITabBarController()
-        tabsController.viewControllers = [
-            moviesViewController,
-            favoritesViewController
-        ]
 
-        window?.rootViewController = tabsController
+        /// Bear with me, MoviesViewController and FavoritesViewController needs to
+        /// handle their own navigation in order to use the navigation search bar.
+        /// Thought about an intermediate VC to handle and pass the queries but felt hacky.
+        let moviesCoordinator = MoviesCoordinator(
+            navigationController: UINavigationController(),
+            getMoviesUseCase: getMoviesUseCase,
+            getFavoritesUseCase: getFavoritesUseCase,
+            deleteFavoriteUseCase: deleteFavoriteUseCase,
+            addFavoriteUseCase: addFavoriteUseCase,
+            isFavoriteUseCase: isFavoriteUseCase,
+            getGenresUseCase: getGenresUseCase
+        )
+
+        let favoritesCoordinator = FavoritesCoordinator(
+            navigationController: UINavigationController(),
+            getFavoritesUseCase: getFavoritesUseCase,
+            deleteFavoriteUseCase: deleteFavoriteUseCase,
+            getGenresUseCase: getGenresUseCase
+        )
+
+        let navigationController = UINavigationController()
+        mainCoordinator = MainCoordinator(
+            navigationController: navigationController,
+            moviesCoordinator: moviesCoordinator,
+            favoritesCoordinator: favoritesCoordinator
+        )
+        mainCoordinator?.start()
+
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
 
