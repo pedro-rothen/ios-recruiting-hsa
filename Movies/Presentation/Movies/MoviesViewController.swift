@@ -49,7 +49,47 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
         viewModel.getMovies()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateVisibleCells()
+    }
+
+    func updateVisibleCells() {
+        for cell in moviesCollectionView.visibleCells {
+            if let indexPath = moviesCollectionView.indexPath(for: cell),
+               let movieCell = cell as? MovieCollectionViewCell,
+               let movie = viewModel.movies?[indexPath.row] {
+                viewModel.isFavorite(movie: movie) { [weak movieCell] in
+                    movieCell?.bindFavoriteIcon(isFavorite: $0)
+                }
+            }
+        }
+    }
+
     func setupBindings() {
+        viewModel
+            .$uiState
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] uiState in
+                guard let self else { return }
+                buttonRetry.isHidden = true
+                labelNoResults.isHidden = true
+                activityIndicator.isHidden = true
+                moviesCollectionView.isHidden = true
+                switch uiState {
+                case .idle:
+                    break
+                case .loading:
+                    activityIndicator.isHidden = false
+                case .error:
+                    buttonRetry.isHidden = false
+                case .noResults:
+                    labelNoResults.isHidden = false
+                case .success:
+                    moviesCollectionView.isHidden = false
+                }
+            }.store(in: &cancellables)
         viewModel
             .$movies
             .dropFirst()
@@ -67,6 +107,10 @@ class MoviesViewController: UIViewController, UISearchResultsUpdating {
 //        let destination = FavoritesViewController()
 //        destination.hidesBottomBarWhenPushed = true
 //        navigationController?.pushViewController(destination, animated: true)
+    }
+
+    @IBAction func buttonRetryTapped(_ sender: Any) {
+        viewModel.getMovies()
     }
 }
 
@@ -142,6 +186,7 @@ class MoviesViewModel {
     var cancellables = Set<AnyCancellable>()
 
     @Published var movies: [Movie]?
+    @Published var uiState: MovieUiState = .idle
 
     init(getMoviesUseCase: GetMoviesUseCase,
          addFavoriteUseCase: AddFavoriteUseCase,
@@ -154,22 +199,25 @@ class MoviesViewModel {
     }
 
     func getMovies() {
+        uiState = .loading
         getMoviesUseCase
             .execute(page: 1)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .finished:
                     break
                 case .failure(let failure):
                     print(failure)
+                    self?.uiState = .error
                 }
             }, receiveValue: { [weak self] in
+                self?.uiState = .success
                 self?.movies = $0
             }).store(in: &cancellables)
     }
 
-    func isFavorite(movie: Movie, completion: @escaping (Bool) ->()) {
+    func isFavorite(movie: Movie, completion: @escaping (Bool) -> Void) {
         isFavoriteMovieUseCase
             .execute(movie: movie)
             .replaceError(with: false)
@@ -179,13 +227,18 @@ class MoviesViewModel {
             }.store(in: &cancellables)
     }
 
-    func toggleFavorite(for movie: Movie, completion: @escaping (Bool) -> ()) {
+    func toggleFavorite(for movie: Movie, completion: @escaping (Bool) -> Void) {
         var newValue = false
         isFavoriteMovieUseCase
             .execute(movie: movie)
             .flatMap { [deleteFavoriteUseCase, addFavoriteUseCase] isFavorite in
                 newValue = !isFavorite
-                return isFavorite ? deleteFavoriteUseCase.execute(movie: movie) : addFavoriteUseCase.execute(movie: movie)
+                return isFavorite ? 
+                deleteFavoriteUseCase.execute(
+                    movie: movie
+                ) : addFavoriteUseCase.execute(
+                    movie: movie
+                )
             }.sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -197,6 +250,10 @@ class MoviesViewModel {
                 completion(newValue)
             }).store(in: &cancellables)
     }
+}
+
+enum MovieUiState {
+    case idle, loading, error, noResults, success
 }
 
 extension Array {

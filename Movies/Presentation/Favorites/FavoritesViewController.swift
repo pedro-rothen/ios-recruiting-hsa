@@ -107,6 +107,25 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         return cell
     }
+
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
+        if editingStyle == .delete {
+            if let movie = viewModel.favoritesMovies?[safe: indexPath.row] {
+                viewModel.deleteFavorite(movie: movie)
+            }
+        }
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+    ) -> UITableViewCell.EditingStyle {
+        .delete
+    }
 }
 
 class FavoriteViewModel {
@@ -134,6 +153,24 @@ class FavoriteViewModel {
                 }
             }, receiveValue: { [weak self] movies in
                 self?.favoritesMovies = movies
+            }).store(in: &cancellables)
+    }
+
+    func deleteFavorite(movie: Movie) {
+        deleteFavoriteUseCase
+            .execute(movie: movie)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let failure):
+                    print(failure)
+                }
+            }, receiveValue: { [weak self] in
+                print("Favorite movie deleted")
+                if let index = self?.favoritesMovies?.firstIndex(where: { $0.id == movie.id }) {
+                    self?.favoritesMovies?.remove(at: index)
+                }
             }).store(in: &cancellables)
     }
 }

@@ -74,7 +74,6 @@ enum MovieServiceError: Error {
     case decodingError(Error)
 }
 
-
 public protocol URLSessionProtocol {
     func dataTaskPublisher(request: URLRequest) -> AnyPublisher<(data: Data, response: URLResponse), URLError>
 }
