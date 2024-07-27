@@ -18,7 +18,7 @@ class MovieCollectionViewCell: UICollectionViewCell {
     }()
     var titleLabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = .systemBackground
         label.font = .systemFont(ofSize: 18, weight: .medium)
         label.numberOfLines = 0
         label.textAlignment = .left

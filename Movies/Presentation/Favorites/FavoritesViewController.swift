@@ -20,10 +20,19 @@ class FavoritesViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    var notResultsLabel: UILabel = {
+    var noResultsLabel: UILabel = {
         let label = UILabel()
         label.text = "No results"
+        label.textAlignment = .center
+        label.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return label
+    }()
+
+    var buttonRemoveFilters: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Remove filters", for: .normal)
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return button
     }()
 
     init(viewModel: FavoriteViewModel, favoritesCoordinator: FavoritesCoordinator) {
@@ -39,13 +48,40 @@ class FavoritesViewController: UIViewController {
     override func loadView() {
         super.loadView()
         self.view = UIView()
+        view.backgroundColor = .systemBackground
+
+        let stackView = UIStackView(arrangedSubviews: [
+            buttonRemoveFilters,
+            noResultsLabel
+        ])
+        stackView.backgroundColor = .systemBackground
+        stackView.axis = .vertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        let constraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        constraint.priority = .defaultLow
+        constraint.isActive = false
+
         view.addSubview(favoriteMoviesTableView)
         NSLayoutConstraint.activate([
             favoriteMoviesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            favoriteMoviesTableView.topAnchor.constraint(equalTo: view.topAnchor),
             favoriteMoviesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            favoriteMoviesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            favoriteMoviesTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+
+        favoriteMoviesTableView.topAnchor.constraint(equalTo: stackView.bottomAnchor).isActive = true
+
+        buttonRemoveFilters.addTarget(
+            self,
+            action: #selector(removeFilters),
+            for: .touchUpInside
+        )
     }
 
     override func viewDidLoad() {
@@ -57,6 +93,7 @@ class FavoritesViewController: UIViewController {
         searchController.searchBar.isHidden = false
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
+
         definesPresentationContext = true
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -83,8 +120,15 @@ class FavoritesViewController: UIViewController {
             .$filteredMovies
             .dropFirst()
             .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] in
                 self?.favoriteMoviesTableView.reloadData()
+                self?.noResultsLabel.isHidden = $0?.isEmpty == false
+            }.store(in: &cancellables)
+        viewModel
+            .$hasActiveFilter
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.buttonRemoveFilters.isHidden = !$0
             }.store(in: &cancellables)
     }
 
@@ -94,6 +138,11 @@ class FavoritesViewController: UIViewController {
             year: viewModel.yearFilter,
             genre: viewModel.genreFilter,
             delegate: self)
+    }
+
+    @objc
+    func removeFilters() {
+        viewModel.removeFilters()
     }
 }
 
@@ -167,15 +216,20 @@ class FavoriteViewModel {
     private var movies: [Movie]?
 
     @Published var filteredMovies: [Movie]?
-    var yearFilter: String?
-    var genreFilter: Genre?
-    var hasActiveFilter: Bool {
-        yearFilter != nil || genreFilter != nil
-    }
+    @Published var yearFilter: String?
+    @Published var genreFilter: Genre?
+    @Published var hasActiveFilter: Bool = false
 
     init(getFavoritesUseCase: GetFavoritesUseCase, deleteFavoriteUseCase: DeleteFavoriteUseCase) {
         self.getFavoritesUseCase = getFavoritesUseCase
         self.deleteFavoriteUseCase = deleteFavoriteUseCase
+
+        $yearFilter
+            .combineLatest($genreFilter)
+            .receive(on: DispatchQueue.main)
+            .map { year, genre in
+                year != nil || genre != nil
+            }.assign(to: &$hasActiveFilter)
     }
 
     func getFavoriteMovies() {
@@ -218,8 +272,17 @@ class FavoriteViewModel {
     }
 
     func filterMovies(query: String) {
-        filteredMovies = query.isEmpty ? movies :
-        movies?.filter { $0.title.lowercased().contains(query.lowercased()) }
+        if hasActiveFilter {
+            filterBy(year: yearFilter, genre: genreFilter)
+        }
+        let listForSearch = hasActiveFilter ? filteredMovies : movies
+        filteredMovies = query.isEmpty ? listForSearch :
+        listForSearch?.filter { $0.title.lowercased().contains(query.lowercased()) }
+    }
+
+    func removeFilters() {
+        setFilters(year: nil, genre: nil)
+        getFavoriteMovies()
     }
 
     func setFilters(year: String?, genre: Genre?) {

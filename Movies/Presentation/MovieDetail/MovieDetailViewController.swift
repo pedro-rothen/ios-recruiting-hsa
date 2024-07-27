@@ -70,7 +70,7 @@ class MovieDetailViewController: UIViewController {
     override func loadView() {
         super.loadView()
         self.view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
 
         contentScrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(contentScrollView)
