@@ -9,13 +9,13 @@ import Foundation
 import Combine
 
 class GetGenresUseCaseImpl: GetGenresUseCase {
-    let movieRepository: MovieRepository
+    let genreRepository: GenreRepository
 
-    init(movieRepository: MovieRepository) {
-        self.movieRepository = movieRepository
+    init(genreRepository: GenreRepository) {
+        self.genreRepository = genreRepository
     }
 
     func execute() -> AnyPublisher<[Genre], any Error> {
-        return movieRepository.fetchGenres()
+        return genreRepository.getGenres()
     }
 }

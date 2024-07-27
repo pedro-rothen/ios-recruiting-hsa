@@ -10,39 +10,12 @@ import Combine
 
 class MovieRepositoryImpl: MovieRepository {
     let remoteDataSource: MovieServiceApi
-    let localDataSource: FavoriteMovieLocalDataSource
 
-    init(remoteDataSource: MovieServiceApi, localDataSource: FavoriteMovieLocalDataSource) {
+    init(remoteDataSource: MovieServiceApi) {
         self.remoteDataSource = remoteDataSource
-        self.localDataSource = localDataSource
     }
 
     func fetchMovies(page: Int) -> AnyPublisher<[Movie], Error> {
         return remoteDataSource.fetchMovies(page: page)
-    }
-    
-    func fetchGenres() -> AnyPublisher<[Genre], Error> {
-        return remoteDataSource.fetchGenres()
-    }
-
-    func fetchFavorites() -> AnyPublisher<[Movie], Error> {
-        return localDataSource
-            .fetchFavorites()
-            .map {
-                $0.compactMap { $0.toDomain }
-            }
-            .eraseToAnyPublisher()
-    }
-
-    func addFavorite(movie: Movie) -> AnyPublisher<Void, Error> {
-        return localDataSource.addFavorite(movie: movie).eraseToAnyPublisher()
-    }
-
-    func deleteFavorite(movie: Movie) -> AnyPublisher<Void, Error> {
-        return localDataSource.deleteFavorite(movie: movie).eraseToAnyPublisher()
-    }
-
-    func isFavorite(movie: Movie) -> AnyPublisher<Bool, Error> {
-        return localDataSource.isFavorite(movie: movie)
     }
 }

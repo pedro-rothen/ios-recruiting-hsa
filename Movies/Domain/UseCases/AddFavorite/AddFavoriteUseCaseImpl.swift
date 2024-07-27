@@ -9,13 +9,13 @@ import Foundation
 import Combine
 
 class AddFavoriteUseCaseImpl: AddFavoriteUseCase {
-    let movieRepository: MovieRepository
+    let favoriteRepository: FavoriteRepository
 
-    init(movieRepository: MovieRepository) {
-        self.movieRepository = movieRepository
+    init(favoriteRepository: FavoriteRepository) {
+        self.favoriteRepository = favoriteRepository
     }
 
-    func execute(movie: Movie) -> AnyPublisher<Void, any Error> {
-        return movieRepository.addFavorite(movie: movie)
+    func execute(movie: Movie) -> AnyPublisher<Void, Error> {
+        return favoriteRepository.addFavorite(movie: movie)
     }
 }

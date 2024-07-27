@@ -10,6 +10,7 @@ import Foundation
 struct Movie: Identifiable, Decodable {
     let id: Int
     let title, overview, posterPath, releaseDate: String
+    let genreIds: [Int]
 
     // This could be a MovieMapper if it gets too complex
     enum CodingKeys: String, CodingKey {
@@ -18,5 +19,6 @@ struct Movie: Identifiable, Decodable {
         case overview
         case posterPath = "poster_path"
         case releaseDate = "release_date"
+        case genreIds = "genre_ids"
     }
 }

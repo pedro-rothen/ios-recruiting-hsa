@@ -81,8 +81,8 @@ enum FavoriteMovieLocalDataSourceError: Error {
 
 extension FavoriteMovieEntity {
     var toDomain: Movie? {
-        guard let title, let overview, let posterPath, let releaseDate else { return nil }
-        return Movie(id: Int(id), title: title, overview: overview, posterPath: posterPath, releaseDate: releaseDate)
+        guard let title, let overview, let posterPath, let releaseDate, let genreIds else { return nil }
+        return Movie(id: Int(id), title: title, overview: overview, posterPath: posterPath, releaseDate: releaseDate, genreIds: genreIds)
     }
 
     func update(from movie: Movie) {
@@ -91,5 +91,6 @@ extension FavoriteMovieEntity {
         self.overview = movie.overview
         self.posterPath = movie.posterPath
         self.releaseDate = movie.releaseDate
+        self.genreIds = movie.genreIds
     }
 }

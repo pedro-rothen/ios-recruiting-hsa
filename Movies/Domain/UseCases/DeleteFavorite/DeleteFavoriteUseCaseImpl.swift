@@ -9,13 +9,13 @@ import Foundation
 import Combine
 
 class DeleteFavoriteUseCaseImpl: DeleteFavoriteUseCase {
-    let movieRepository: MovieRepository
+    let favoriteRepository: FavoriteRepository
 
-    init(movieRepository: MovieRepository) {
-        self.movieRepository = movieRepository
+    init(favoriteRepository: FavoriteRepository) {
+        self.favoriteRepository = favoriteRepository
     }
 
     func execute(movie: Movie) -> AnyPublisher<Void, any Error> {
-        return movieRepository.deleteFavorite(movie: movie)
+        return favoriteRepository.deleteFavorite(movie: movie)
     }
 }

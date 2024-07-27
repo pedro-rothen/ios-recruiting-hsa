@@ -9,13 +9,13 @@ import Foundation
 import Combine
 
 class IsFavoriteMovieUseCaseImpl: IsFavoriteMovieUseCase {
-    let movieRepository: MovieRepository
+    let favoriteRepository: FavoriteRepository
 
-    init(movieRepository: MovieRepository) {
-        self.movieRepository = movieRepository
+    init(favoriteRepository: FavoriteRepository) {
+        self.favoriteRepository = favoriteRepository
     }
 
     func execute(movie: Movie) -> AnyPublisher<Bool, Error> {
-        return movieRepository.isFavorite(movie: movie)
+        return favoriteRepository.isFavorite(movie: movie)
     }
 }
