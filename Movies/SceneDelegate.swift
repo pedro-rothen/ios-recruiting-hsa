@@ -67,10 +67,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             isFavoriteUseCase: isFavoriteUseCase
         )
 
+        let getGenresUseCase = GetGenresUseCaseImpl(
+            genreRepository: genreRepository
+        )
         let favoritesCoordinator = FavoritesCoordinator(
             navigationController: UINavigationController(),
             getFavoritesUseCase: getFavoritesUseCase,
-            deleteFavoriteUseCase: deleteFavoriteUseCase,
+            deleteFavoriteUseCase: deleteFavoriteUseCase, 
+            getGenresUseCase: getGenresUseCase,
             getGenresByIdsUseCase: getGenresByIdsUseCase,
             addFavoriteUseCase: addFavoriteUseCase, 
             isFavoriteUseCase: isFavoriteUseCase

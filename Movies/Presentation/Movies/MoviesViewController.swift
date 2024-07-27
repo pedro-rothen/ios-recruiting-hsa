@@ -44,7 +44,6 @@ class MoviesViewController: UIViewController {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-        searchController.isActive = true
 
         moviesCollectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: movieCellId)
         moviesCollectionView.register(

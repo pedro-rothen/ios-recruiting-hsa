@@ -58,7 +58,12 @@ class FavoritesViewController: UIViewController {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-        searchController.isActive = true
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "pencil"),
+            style: .plain,
+            target: self,
+            action: #selector(showFilters))
 
         favoriteMoviesTableView.register(FavoriteMovieTableViewCell.self, forCellReuseIdentifier: cellId)
         favoriteMoviesTableView.rowHeight = UITableView.automaticDimension
@@ -81,6 +86,20 @@ class FavoritesViewController: UIViewController {
             .sink { [weak self] _ in
                 self?.favoriteMoviesTableView.reloadData()
             }.store(in: &cancellables)
+    }
+
+    @objc
+    func showFilters() {
+        coordinator?.showFavoriteFilters(
+            year: viewModel.yearFilter,
+            genre: viewModel.genreFilter,
+            delegate: self)
+    }
+}
+
+extension FavoritesViewController: FavouriteFiltersDelegate {
+    func didEndPickingFilters(year: String?, genre: Genre?) {
+        viewModel.setFilters(year: year, genre: genre)
     }
 }
 
@@ -148,6 +167,11 @@ class FavoriteViewModel {
     private var movies: [Movie]?
 
     @Published var filteredMovies: [Movie]?
+    var yearFilter: String?
+    var genreFilter: Genre?
+    var hasActiveFilter: Bool {
+        yearFilter != nil || genreFilter != nil
+    }
 
     init(getFavoritesUseCase: GetFavoritesUseCase, deleteFavoriteUseCase: DeleteFavoriteUseCase) {
         self.getFavoritesUseCase = getFavoritesUseCase
@@ -168,6 +192,10 @@ class FavoriteViewModel {
             }, receiveValue: { [weak self] movies in
                 self?.movies = movies
                 self?.filteredMovies = movies
+
+                if self?.hasActiveFilter == true {
+                    self?.filterBy(year: self?.yearFilter, genre: self?.genreFilter)
+                }
             }).store(in: &cancellables)
     }
 
@@ -192,5 +220,29 @@ class FavoriteViewModel {
     func filterMovies(query: String) {
         filteredMovies = query.isEmpty ? movies :
         movies?.filter { $0.title.lowercased().contains(query.lowercased()) }
+    }
+
+    func setFilters(year: String?, genre: Genre?) {
+        yearFilter = year
+        genreFilter = genre
+    }
+
+    func filterBy(year: String?, genre: Genre?) {
+        if year == nil && genre == nil {
+            filteredMovies = movies
+            return
+        }
+        var filteredMovies = movies
+        if let year {
+            filteredMovies = filteredMovies?.filter {
+                $0.releaseDate.contains(year)
+            }
+        }
+        if let genre {
+            filteredMovies = filteredMovies?.filter {
+                $0.genreIds.contains(genre.id)
+            }
+        }
+        self.filteredMovies = filteredMovies
     }
 }

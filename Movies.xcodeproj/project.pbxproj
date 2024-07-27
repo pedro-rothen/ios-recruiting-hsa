@@ -61,6 +61,8 @@
 		EB2D5EE62C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EE52C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift */; };
 		EB2D5EE92C547A070043A6EE /* GetGenresByIdsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EE82C547A070043A6EE /* GetGenresByIdsUseCase.swift */; };
 		EB2D5EEB2C547A3E0043A6EE /* GetGenresByIdsUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EEA2C547A3E0043A6EE /* GetGenresByIdsUseCaseImpl.swift */; };
+		EB2D5EF12C549D3C0043A6EE /* FavoriteFiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EEF2C549D3C0043A6EE /* FavoriteFiltersViewController.swift */; };
+		EB2D5EF22C549D3C0043A6EE /* FavoriteFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EF02C549D3C0043A6EE /* FavoriteFiltersViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +140,8 @@
 		EB2D5EE52C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncGenresUseCaseImpl.swift; sourceTree = "<group>"; };
 		EB2D5EE82C547A070043A6EE /* GetGenresByIdsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGenresByIdsUseCase.swift; sourceTree = "<group>"; };
 		EB2D5EEA2C547A3E0043A6EE /* GetGenresByIdsUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGenresByIdsUseCaseImpl.swift; sourceTree = "<group>"; };
+		EB2D5EEF2C549D3C0043A6EE /* FavoriteFiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFiltersViewController.swift; sourceTree = "<group>"; };
+		EB2D5EF02C549D3C0043A6EE /* FavoriteFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteFiltersViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,6 +229,7 @@
 		EB2D5E692C4FF9670043A6EE /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				EB2D5EEC2C549C5A0043A6EE /* FavoriteFilter */,
 				EB2D5EC82C5345F90043A6EE /* Coordinator */,
 				EB2D5EC52C5342670043A6EE /* MovieDetail */,
 				EB2D5E702C4FFC2F0043A6EE /* Favorites */,
@@ -493,6 +498,15 @@
 			path = GetGenresById;
 			sourceTree = "<group>";
 		};
+		EB2D5EEC2C549C5A0043A6EE /* FavoriteFilter */ = {
+			isa = PBXGroup;
+			children = (
+				EB2D5EEF2C549D3C0043A6EE /* FavoriteFiltersViewController.swift */,
+				EB2D5EF02C549D3C0043A6EE /* FavoriteFiltersViewController.xib */,
+			);
+			path = FavoriteFilter;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -607,6 +621,7 @@
 			files = (
 				EB2D5E432C4FF89F0043A6EE /* Assets.xcassets in Resources */,
 				EB2D5E462C4FF89F0043A6EE /* Base in Resources */,
+				EB2D5EF22C549D3C0043A6EE /* FavoriteFiltersViewController.xib in Resources */,
 				EB2D5E3E2C4FF89D0043A6EE /* Base in Resources */,
 				EB2D5E732C4FFC720043A6EE /* MoviesViewController.xib in Resources */,
 			);
@@ -683,6 +698,7 @@
 				EB2D5E412C4FF89D0043A6EE /* Movies.xcdatamodeld in Sources */,
 				EB2D5E392C4FF89D0043A6EE /* SceneDelegate.swift in Sources */,
 				EB2D5ED02C534C8C0043A6EE /* MoviesCoordinator.swift in Sources */,
+				EB2D5EF12C549D3C0043A6EE /* FavoriteFiltersViewController.swift in Sources */,
 				EB2D5ED52C54628E0043A6EE /* GenreRepository.swift in Sources */,
 				EB2D5EC22C51E07F0043A6EE /* IsFavoriteMovieUseCase.swift in Sources */,
 				EB2D5EB82C51D1120043A6EE /* DeleteFavoriteUseCaseImpl.swift in Sources */,
