@@ -29,7 +29,7 @@ final class MovieServiceApiImplTests: XCTestCase {
         super.tearDown()
     }
 
-    func testDataSuccess() throws {
+    func testMoviesDataSuccess() throws {
         // Arrange
         let data = try Data(contentsOf: MovieStub.jsonResponseUrl)
         mockSession.data = data
@@ -37,7 +37,7 @@ final class MovieServiceApiImplTests: XCTestCase {
         // Act
         var receivedMovies: [Movie]?
         var receivedError: Error?
-        let expectation = expectation(description: "Service parses json response successfully")
+        let expectation = expectation(description: "Service parses json response into movies successfully")
         movieServiceApiImpl
             .fetchMovies(page: 1)
             .sink(receiveCompletion: { completion in
@@ -58,7 +58,7 @@ final class MovieServiceApiImplTests: XCTestCase {
         XCTAssertNil(receivedError)
     }
 
-    func testDataParseFailure() throws {
+    func testMoviesDataParseFailure() throws {
         // Arrange
         let data = try Data(contentsOf: MovieStub.jsonBadResponseUrl)
         mockSession.data = data
@@ -66,7 +66,9 @@ final class MovieServiceApiImplTests: XCTestCase {
         // Act
         var receivedMovies: [Movie]?
         var receivedError: Error?
-        let expectation = expectation(description: "Service fails to parse a bad json response")
+        let expectation = expectation(
+            description: "Service fails to parse a bad json response"
+        )
         movieServiceApiImpl
             .fetchMovies(page: 1)
             .sink(receiveCompletion: { completion in
@@ -85,6 +87,37 @@ final class MovieServiceApiImplTests: XCTestCase {
         // Assert
         XCTAssertNil(receivedMovies)
         XCTAssertNotNil(receivedError)
+    }
+
+    func testGenresDataSuccess() throws {
+        // Arrange
+        let data = try Data(contentsOf: GenreStub.jsonResponseUrl)
+        mockSession.data = data
+
+        // Act
+        var receivedGenres: [Genre]?
+        var receivedError: Error?
+        let expectation = expectation(
+            description: "Service parses json response into genres successfully"
+        )
+        movieServiceApiImpl
+            .fetchGenres()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    expectation.fulfill()
+                case .failure(let failure):
+                    receivedError = failure
+                    expectation.fulfill()
+                }
+            }, receiveValue: {
+                receivedGenres = $0
+            }).store(in: &cancellables)
+        waitForExpectations(timeout: 1)
+
+        // Assert
+        XCTAssertNotNil(receivedGenres)
+        XCTAssertNil(receivedError)
     }
 
     func testNetworkError() throws {
@@ -155,6 +188,16 @@ class MovieStub {
         let bundle = Bundle(for: MovieStub.self)
         return bundle.url(
             forResource: "MockBadMovieResponse",
+            withExtension: "json"
+        )!
+    }
+}
+
+class GenreStub {
+    class var jsonResponseUrl: URL {
+        let bundle = Bundle(for: MovieStub.self)
+        return bundle.url(
+            forResource: "MockGenreResponse",
             withExtension: "json"
         )!
     }

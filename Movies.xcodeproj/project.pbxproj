@@ -67,6 +67,8 @@
 		EB2D5EFB2C5544BD0043A6EE /* MockMovieResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EF92C5544BD0043A6EE /* MockMovieResponse.json */; };
 		EB2D5EFD2C554A250043A6EE /* MockBadMovieResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFC2C554A240043A6EE /* MockBadMovieResponse.json */; };
 		EB2D5EFE2C554A250043A6EE /* MockBadMovieResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFC2C554A240043A6EE /* MockBadMovieResponse.json */; };
+		EB2D5F002C5555B90043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
+		EB2D5F012C5555B90043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +150,7 @@
 		EB2D5EF62C553DA90043A6EE /* MovieServiceApiImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieServiceApiImplTests.swift; sourceTree = "<group>"; };
 		EB2D5EF92C5544BD0043A6EE /* MockMovieResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockMovieResponse.json; sourceTree = "<group>"; };
 		EB2D5EFC2C554A240043A6EE /* MockBadMovieResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockBadMovieResponse.json; sourceTree = "<group>"; };
+		EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockGenreResponse.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -535,6 +538,7 @@
 			children = (
 				EB2D5EF92C5544BD0043A6EE /* MockMovieResponse.json */,
 				EB2D5EFC2C554A240043A6EE /* MockBadMovieResponse.json */,
+				EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */,
 			);
 			path = TestData;
 			sourceTree = "<group>";
@@ -665,6 +669,7 @@
 			files = (
 				EB2D5EFD2C554A250043A6EE /* MockBadMovieResponse.json in Resources */,
 				EB2D5EFA2C5544BD0043A6EE /* MockMovieResponse.json in Resources */,
+				EB2D5F002C5555B90043A6EE /* MockGenreResponse.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,6 +679,7 @@
 			files = (
 				EB2D5EFE2C554A250043A6EE /* MockBadMovieResponse.json in Resources */,
 				EB2D5EFB2C5544BD0043A6EE /* MockMovieResponse.json in Resources */,
+				EB2D5F012C5555B90043A6EE /* MockGenreResponse.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

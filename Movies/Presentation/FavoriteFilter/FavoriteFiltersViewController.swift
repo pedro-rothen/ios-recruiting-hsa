@@ -9,7 +9,8 @@ import UIKit
 import Combine
 
 /// I did not plan to implement this view originally,
-/// but I did it anyway by omitting a coordinator and using a .xib
+/// but I did it anyway by omitting a coordinator and the viewmodel
+/// Also using a .xib for quick UI setup
 class FavoriteFiltersViewController: UIViewController {
     @IBOutlet weak var genreLabel: UILabel!
     @IBOutlet weak var yearLabel: UILabel!
