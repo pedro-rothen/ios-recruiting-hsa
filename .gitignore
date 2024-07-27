@@ -5,6 +5,9 @@
 ## User settings
 xcuserdata/
 
+# Keeps Package.resolved
+!Movies.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
 ## Obj-C/Swift specific
 *.hmap
 
