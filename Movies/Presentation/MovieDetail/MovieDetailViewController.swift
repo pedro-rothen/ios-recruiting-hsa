@@ -42,13 +42,23 @@ class MovieDetailViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
+    var toggleFavoriteButton: UIButton = {
+        let button = UIButton()
+        button.tintColor = .orange
+        button.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        return button
+    }()
     var cancellables = Set<AnyCancellable>()
 
     let movie: Movie
     let getGenresByIdsUseCase: GetGenresByIdsUseCase
+    let viewModel: MovieDetailViewModel
 
-    init(movie: Movie, getGenresByIdsUseCase: GetGenresByIdsUseCase) {
+    init(movie: Movie,
+         viewModel: MovieDetailViewModel,
+         getGenresByIdsUseCase: GetGenresByIdsUseCase) {
         self.movie = movie
+        self.viewModel = viewModel
         self.getGenresByIdsUseCase = getGenresByIdsUseCase
         super.init(nibName: nil, bundle: nil)
     }
@@ -86,6 +96,12 @@ class MovieDetailViewController: UIViewController {
         bottomConstraint.isActive = true
         scrollableContentView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
 
+        toggleFavoriteButton.addTarget(
+            self,
+            action: #selector(toggleFavoriteButtonTapped),
+            for: .touchUpInside
+        )
+
         let contentStackView = UIStackView()
         contentStackView.axis = .vertical
         contentStackView.spacing = 10
@@ -94,7 +110,14 @@ class MovieDetailViewController: UIViewController {
         contentStackView.isLayoutMarginsRelativeArrangement = true
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
         contentStackView.addArrangedSubview(posterImageView)
-        contentStackView.addArrangedSubview(titleLabel)
+
+        let detailStack = UIStackView(arrangedSubviews: [
+            titleLabel,
+            toggleFavoriteButton
+        ])
+        detailStack.axis = .horizontal
+
+        contentStackView.addArrangedSubview(detailStack)
         contentStackView.addArrangedSubview(releaseYearLabel)
         contentStackView.addArrangedSubview(genresLabel)
         contentStackView.addArrangedSubview(overviewLabel)
@@ -120,6 +143,9 @@ class MovieDetailViewController: UIViewController {
         titleLabel.text = movie.title
         releaseYearLabel.text = movie.releaseDate
         overviewLabel.text = movie.overview
+        viewModel.isFavorite(movie: movie) { [weak self] isFavorite in
+            self?.bindFavoriteIcon(isFavorite: isFavorite)
+        }
         getGenresByIdsUseCase
             .execute(ids: movie.genreIds)
             .receive(on: DispatchQueue.main)
@@ -130,5 +156,77 @@ class MovieDetailViewController: UIViewController {
                 }).dropLast(2)
                 self?.genresLabel.text = String(genres)
             }.store(in: &cancellables)
+    }
+
+    @objc
+    func toggleFavoriteButtonTapped() {
+        viewModel.toggleFavorite(for: movie) { [weak self] isFavorite in
+            self?.bindFavoriteIcon(isFavorite: isFavorite)
+        }
+    }
+
+    func bindFavoriteIcon(isFavorite: Bool) {
+        toggleFavoriteButton.setImage(
+            UIImage(systemName: isFavorite ? "heart.fill" : "heart"),
+            for: .normal
+        )
+    }
+}
+
+class MovieDetailViewModel: ToggleFavorite {
+    var addFavoriteUseCase: AddFavoriteUseCase
+    var deleteFavoriteUseCase: DeleteFavoriteUseCase
+    var isFavoriteMovieUseCase: IsFavoriteMovieUseCase
+    var cancellables = Set<AnyCancellable>()
+
+    init(addFavoriteUseCase: AddFavoriteUseCase,
+         deleteFavoriteUseCase: DeleteFavoriteUseCase,
+         isFavoriteMovieUseCase: IsFavoriteMovieUseCase) {
+        self.addFavoriteUseCase = addFavoriteUseCase
+        self.deleteFavoriteUseCase = deleteFavoriteUseCase
+        self.isFavoriteMovieUseCase = isFavoriteMovieUseCase
+    }
+}
+
+protocol ToggleFavorite: AnyObject {
+    var addFavoriteUseCase: AddFavoriteUseCase { get }
+    var deleteFavoriteUseCase: DeleteFavoriteUseCase { get }
+    var isFavoriteMovieUseCase: IsFavoriteMovieUseCase { get }
+    var cancellables: Set<AnyCancellable> { get set }
+}
+
+extension ToggleFavorite {
+    func isFavorite(movie: Movie, completion: @escaping (Bool) -> Void) {
+        isFavoriteMovieUseCase
+            .execute(movie: movie)
+            .replaceError(with: false)
+            .map { $0 }
+            .sink {
+                completion($0)
+            }.store(in: &cancellables)
+    }
+
+    func toggleFavorite(for movie: Movie, completion: @escaping (Bool) -> Void) {
+        var newValue = false
+        isFavoriteMovieUseCase
+            .execute(movie: movie)
+            .flatMap { [deleteFavoriteUseCase, addFavoriteUseCase] isFavorite in
+                newValue = !isFavorite
+                return isFavorite ?
+                deleteFavoriteUseCase.execute(
+                    movie: movie
+                ) : addFavoriteUseCase.execute(
+                    movie: movie
+                )
+            }.sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let failure):
+                    print(failure)
+                }
+            }, receiveValue: {
+                completion(newValue)
+            }).store(in: &cancellables)
     }
 }

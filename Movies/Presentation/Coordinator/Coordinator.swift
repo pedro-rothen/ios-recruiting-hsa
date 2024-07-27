@@ -15,9 +15,18 @@ protocol Coordinator {
 extension Coordinator {
     func showMovieDetail(
         movie: Movie,
-        getGenresByIdsUseCase: GetGenresByIdsUseCase) {
+        getGenresByIdsUseCase: GetGenresByIdsUseCase,
+        addFavoriteUseCase: AddFavoriteUseCase,
+        deleteFavoriteUseCase: DeleteFavoriteUseCase,
+        isFavoriteMovieUseCase: IsFavoriteMovieUseCase) {
+            // Regretting about not choosing automatic injection
+            let viewModel = MovieDetailViewModel(
+                addFavoriteUseCase: addFavoriteUseCase,
+                deleteFavoriteUseCase: deleteFavoriteUseCase,
+                isFavoriteMovieUseCase: isFavoriteMovieUseCase)
             let detailViewController = MovieDetailViewController(
-                movie: movie,
+                movie: movie, 
+                viewModel: viewModel,
                 getGenresByIdsUseCase: getGenresByIdsUseCase
             )
             detailViewController.hidesBottomBarWhenPushed = true

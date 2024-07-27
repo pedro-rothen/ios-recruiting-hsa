@@ -12,15 +12,21 @@ class FavoritesCoordinator: Coordinator {
     let getFavoritesUseCase: GetFavoritesUseCase
     let deleteFavoriteUseCase: DeleteFavoriteUseCase
     let getGenresByIdsUseCase: GetGenresByIdsUseCase
+    let addFavoriteUseCase: AddFavoriteUseCase
+    let isFavoriteUseCase: IsFavoriteMovieUseCase
 
     init(navigationController: UINavigationController, 
          getFavoritesUseCase: GetFavoritesUseCase,
          deleteFavoriteUseCase: DeleteFavoriteUseCase,
-         getGenresByIdsUseCase: GetGenresByIdsUseCase) {
+         getGenresByIdsUseCase: GetGenresByIdsUseCase,
+         addFavoriteUseCase: AddFavoriteUseCase,
+         isFavoriteUseCase: IsFavoriteMovieUseCase) {
         self.navigationController = navigationController
         self.getFavoritesUseCase = getFavoritesUseCase
         self.deleteFavoriteUseCase = deleteFavoriteUseCase
         self.getGenresByIdsUseCase = getGenresByIdsUseCase
+        self.addFavoriteUseCase = addFavoriteUseCase
+        self.isFavoriteUseCase = isFavoriteUseCase
     }
 
     func start() {
@@ -37,6 +43,10 @@ class FavoritesCoordinator: Coordinator {
     }
 
     func showMovieDetail(movie: Movie) {
-        showMovieDetail(movie: movie, getGenresByIdsUseCase: getGenresByIdsUseCase)
+        showMovieDetail(movie: movie, 
+                        getGenresByIdsUseCase: getGenresByIdsUseCase,
+                        addFavoriteUseCase: addFavoriteUseCase,
+                        deleteFavoriteUseCase: deleteFavoriteUseCase,
+                        isFavoriteMovieUseCase: isFavoriteUseCase)
     }
 }

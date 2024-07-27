@@ -62,16 +62,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             getMoviesUseCase: getMoviesUseCase,
             getFavoritesUseCase: getFavoritesUseCase,
             deleteFavoriteUseCase: deleteFavoriteUseCase,
+            getGenresByIdsUseCase: getGenresByIdsUseCase, 
             addFavoriteUseCase: addFavoriteUseCase,
-            isFavoriteUseCase: isFavoriteUseCase,
-            getGenresByIdsUseCase: getGenresByIdsUseCase
+            isFavoriteUseCase: isFavoriteUseCase
         )
 
         let favoritesCoordinator = FavoritesCoordinator(
             navigationController: UINavigationController(),
             getFavoritesUseCase: getFavoritesUseCase,
             deleteFavoriteUseCase: deleteFavoriteUseCase,
-            getGenresByIdsUseCase: getGenresByIdsUseCase
+            getGenresByIdsUseCase: getGenresByIdsUseCase,
+            addFavoriteUseCase: addFavoriteUseCase, 
+            isFavoriteUseCase: isFavoriteUseCase
         )
 
         let navigationController = UINavigationController()

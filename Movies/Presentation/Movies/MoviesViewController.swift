@@ -187,11 +187,11 @@ extension MoviesViewController: MovieCollectionViewCellDelegate {
     }
 }
 
-class MoviesViewModel {
+class MoviesViewModel: ToggleFavorite {
     private let getMoviesUseCase: GetMoviesUseCase
-    private let addFavoriteUseCase: AddFavoriteUseCase
-    private let deleteFavoriteUseCase: DeleteFavoriteUseCase
-    private let isFavoriteMovieUseCase: IsFavoriteMovieUseCase
+    var addFavoriteUseCase: AddFavoriteUseCase
+    var deleteFavoriteUseCase: DeleteFavoriteUseCase
+    var isFavoriteMovieUseCase: IsFavoriteMovieUseCase
     var cancellables = Set<AnyCancellable>()
 
     private var movies: [Movie]?
@@ -225,40 +225,6 @@ class MoviesViewModel {
                 self?.uiState = .success
                 self?.movies = $0
                 self?.filteredMovies = $0
-            }).store(in: &cancellables)
-    }
-
-    func isFavorite(movie: Movie, completion: @escaping (Bool) -> Void) {
-        isFavoriteMovieUseCase
-            .execute(movie: movie)
-            .replaceError(with: false)
-            .map { $0 }
-            .sink {
-                completion($0)
-            }.store(in: &cancellables)
-    }
-
-    func toggleFavorite(for movie: Movie, completion: @escaping (Bool) -> Void) {
-        var newValue = false
-        isFavoriteMovieUseCase
-            .execute(movie: movie)
-            .flatMap { [deleteFavoriteUseCase, addFavoriteUseCase] isFavorite in
-                newValue = !isFavorite
-                return isFavorite ? 
-                deleteFavoriteUseCase.execute(
-                    movie: movie
-                ) : addFavoriteUseCase.execute(
-                    movie: movie
-                )
-            }.sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let failure):
-                    print(failure)
-                }
-            }, receiveValue: {
-                completion(newValue)
             }).store(in: &cancellables)
     }
 
