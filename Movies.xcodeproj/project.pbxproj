@@ -57,6 +57,8 @@
 		EB2D5EDD2C5464790043A6EE /* GenreLocalDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EDC2C5464790043A6EE /* GenreLocalDataSource.swift */; };
 		EB2D5EDF2C54661C0043A6EE /* GenreLocalDataSourceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EDE2C54661C0043A6EE /* GenreLocalDataSourceImpl.swift */; };
 		EB2D5EE12C546C970043A6EE /* FavoriteRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EE02C546C970043A6EE /* FavoriteRepositoryImpl.swift */; };
+		EB2D5EE42C5474830043A6EE /* SyncGenresUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EE32C5474830043A6EE /* SyncGenresUseCase.swift */; };
+		EB2D5EE62C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EE52C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +132,8 @@
 		EB2D5EDC2C5464790043A6EE /* GenreLocalDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreLocalDataSource.swift; sourceTree = "<group>"; };
 		EB2D5EDE2C54661C0043A6EE /* GenreLocalDataSourceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreLocalDataSourceImpl.swift; sourceTree = "<group>"; };
 		EB2D5EE02C546C970043A6EE /* FavoriteRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRepositoryImpl.swift; sourceTree = "<group>"; };
+		EB2D5EE32C5474830043A6EE /* SyncGenresUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncGenresUseCase.swift; sourceTree = "<group>"; };
+		EB2D5EE52C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncGenresUseCaseImpl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +318,7 @@
 		EB2D5E932C5084340043A6EE /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				EB2D5EE22C54745B0043A6EE /* SyncGenres */,
 				EB2D5EC02C51E01E0043A6EE /* IsFavorite */,
 				EB2D5EA02C5086780043A6EE /* DeleteFavorite */,
 				EB2D5E9F2C5086520043A6EE /* AddFavorite */,
@@ -463,6 +468,15 @@
 				EB2D5EDE2C54661C0043A6EE /* GenreLocalDataSourceImpl.swift */,
 			);
 			path = Genre;
+			sourceTree = "<group>";
+		};
+		EB2D5EE22C54745B0043A6EE /* SyncGenres */ = {
+			isa = PBXGroup;
+			children = (
+				EB2D5EE32C5474830043A6EE /* SyncGenresUseCase.swift */,
+				EB2D5EE52C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift */,
+			);
+			path = SyncGenres;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -647,6 +661,7 @@
 				EB2D5EB62C51D07E0043A6EE /* DeleteFavoriteUseCase.swift in Sources */,
 				EB2D5ED22C534E300043A6EE /* FavoritesCoordinator.swift in Sources */,
 				EB2D5EAD2C513D340043A6EE /* MovieCollectionViewCell.swift in Sources */,
+				EB2D5EE42C5474830043A6EE /* SyncGenresUseCase.swift in Sources */,
 				EB2D5E9B2C50853D0043A6EE /* GetGenresUseCase.swift in Sources */,
 				EB2D5EB22C51CF640043A6EE /* GetFavoritesUseCase.swift in Sources */,
 				EB2D5EDD2C5464790043A6EE /* GenreLocalDataSource.swift in Sources */,
@@ -667,6 +682,7 @@
 				EB2D5EDF2C54661C0043A6EE /* GenreLocalDataSourceImpl.swift in Sources */,
 				EB2D5E8F2C5082180043A6EE /* MovieRepository.swift in Sources */,
 				EB2D5EBC2C51D1F10043A6EE /* AddFavoriteUseCaseImpl.swift in Sources */,
+				EB2D5EE62C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift in Sources */,
 				EB2D5EB42C51CF8B0043A6EE /* GetFavoritesUseCaseImpl.swift in Sources */,
 				EB2D5EC72C5342AD0043A6EE /* MovieDetailViewController.swift in Sources */,
 				EB2D5E7E2C506C840043A6EE /* MovieServiceApi.swift in Sources */,

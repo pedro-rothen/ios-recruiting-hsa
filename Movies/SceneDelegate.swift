@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var mainCoordinator: MainCoordinator?
+    var cancellables = Set<AnyCancellable>()
 
     func scene(
         _ scene: UIScene,
@@ -36,7 +38,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let getGenresUseCase = GetGenresUseCaseImpl(genreRepository: genreRepository)
 
         /// Another solution would be merge favorite operations in a FavoriteService,
-        /// and then call the repository directly. But I already did write those usecases. so anyways it's better for abstraction.
+        /// and then call the repository directly. But I already did write those usecases. 
+        /// so anyways it's better for abstraction.
         /// UPDATE: End it up moving all favorite operation to a separate repository
         let getFavoritesUseCase = GetFavoritesUseCaseImpl(
             favoriteRepository: favoriteRepository
@@ -81,6 +84,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+
+        let syncGenresUseCase = SyncGenresUseCaseImpl(
+            genreRepository: genreRepository
+        )
+        syncGenresUseCase
+                .execute()
+                .replaceError(with: false)
+                .sink {
+                    print("Update genres from remote result: \($0)")
+                }.store(in: &cancellables)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) { }
