@@ -153,6 +153,7 @@
 		EB2D5EFC2C554A240043A6EE /* MockBadMovieResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockBadMovieResponse.json; sourceTree = "<group>"; };
 		EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockGenreResponse.json; sourceTree = "<group>"; };
 		EB2D5F032C5558BF0043A6EE /* MoviesDateParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesDateParser.swift; sourceTree = "<group>"; };
+		EB2D5F052C555DE90043A6EE /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +185,7 @@
 		EB2D5E2A2C4FF89D0043A6EE = {
 			isa = PBXGroup;
 			children = (
+				EB2D5F052C555DE90043A6EE /* TestPlan.xctestplan */,
 				EB2D5E352C4FF89D0043A6EE /* Movies */,
 				EB2D5EF82C5544570043A6EE /* TestData */,
 				EB2D5E4F2C4FF89F0043A6EE /* MoviesTests */,
