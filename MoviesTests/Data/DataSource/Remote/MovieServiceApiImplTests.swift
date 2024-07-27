@@ -10,6 +10,7 @@ import Combine
 @testable import Movies
 
 final class MovieServiceApiImplTests: XCTestCase {
+    // Do you guys prefer 'sut'?
     var movieServiceApiImpl: MovieServiceApiImpl!
     var mockSession: MockURLSession!
     var cancellables: Set<AnyCancellable>!
@@ -29,6 +30,7 @@ final class MovieServiceApiImplTests: XCTestCase {
         super.tearDown()
     }
 
+    // Do you guys prefer 'GWT'?
     func testMoviesDataSuccess() throws {
         // Arrange
         let data = try Data(contentsOf: MovieStub.jsonResponseUrl)
@@ -176,29 +178,40 @@ class MockURLSession: URLSessionProtocol {
     }
 }
 
-class MovieStub {
+protocol TestBundle: AnyObject { }
+extension TestBundle {
+    static var bundle: Bundle {
+        return Bundle(for: Self.self)
+    }
+}
+class MovieStub: TestBundle {
     class var jsonResponseUrl: URL {
-        let bundle = Bundle(for: MovieStub.self)
         return bundle.url(
             forResource: "MockMovieResponse",
             withExtension: "json"
         )!
     }
     class var jsonBadResponseUrl: URL {
-        let bundle = Bundle(for: MovieStub.self)
         return bundle.url(
             forResource: "MockBadMovieResponse",
             withExtension: "json"
         )!
     }
+    class var movies: [Movie] {
+        let data = try! Data(contentsOf: jsonResponseUrl)
+        return try! JSONDecoder().decode(MovieResponse.self, from: data).results
+    }
 }
 
-class GenreStub {
+class GenreStub: TestBundle {
     class var jsonResponseUrl: URL {
-        let bundle = Bundle(for: MovieStub.self)
         return bundle.url(
             forResource: "MockGenreResponse",
             withExtension: "json"
         )!
+    }
+    class var genres: [Genre] {
+        let data = try! Data(contentsOf: jsonResponseUrl)
+        return try! JSONDecoder().decode(GenreResponse.self, from: data).genres
     }
 }

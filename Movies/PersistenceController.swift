@@ -19,7 +19,7 @@ class PersistenceController {
 
     init() {
         container = NSPersistentContainer(name: "Movies")
-        container.loadPersistentStores { description, error in
+        container.loadPersistentStores { _, error in
             if let error = error {
                 print("Error while loading persistence storage \(error)")
             }

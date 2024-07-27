@@ -70,6 +70,10 @@
 		EB2D5F002C5555B90043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
 		EB2D5F012C5555B90043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
 		EB2D5F042C5558BF0043A6EE /* MoviesDateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5F032C5558BF0043A6EE /* MoviesDateParser.swift */; };
+		EB2D5F082C555F460043A6EE /* MoviesDateParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5F072C555F450043A6EE /* MoviesDateParserTests.swift */; };
+		EB2D5F0B2C5565FB0043A6EE /* MovieRepositoryImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5F0A2C5565FB0043A6EE /* MovieRepositoryImplTests.swift */; };
+		EB2D5F0D2C55796B0043A6EE /* GenreRepositoryImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5F0C2C55796B0043A6EE /* GenreRepositoryImplTests.swift */; };
+		EB2D5F112C557E4D0043A6EE /* GenreLocalDataSourceImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5F102C557E4D0043A6EE /* GenreLocalDataSourceImplTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +158,10 @@
 		EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockGenreResponse.json; sourceTree = "<group>"; };
 		EB2D5F032C5558BF0043A6EE /* MoviesDateParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesDateParser.swift; sourceTree = "<group>"; };
 		EB2D5F052C555DE90043A6EE /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
+		EB2D5F072C555F450043A6EE /* MoviesDateParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesDateParserTests.swift; sourceTree = "<group>"; };
+		EB2D5F0A2C5565FB0043A6EE /* MovieRepositoryImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRepositoryImplTests.swift; sourceTree = "<group>"; };
+		EB2D5F0C2C55796B0043A6EE /* GenreRepositoryImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreRepositoryImplTests.swift; sourceTree = "<group>"; };
+		EB2D5F102C557E4D0043A6EE /* GenreLocalDataSourceImplTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreLocalDataSourceImplTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +236,7 @@
 		EB2D5E4F2C4FF89F0043A6EE /* MoviesTests */ = {
 			isa = PBXGroup;
 			children = (
+				EB2D5F062C555F1E0043A6EE /* Utilities */,
 				EB2D5EF42C553D5A0043A6EE /* Data */,
 			);
 			path = MoviesTests;
@@ -525,7 +534,8 @@
 		EB2D5EF42C553D5A0043A6EE /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				EB2D5EF52C553D670043A6EE /* Remote */,
+				EB2D5F0E2C557C730043A6EE /* DataSource */,
+				EB2D5F092C5565BA0043A6EE /* Repositories */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -554,6 +564,40 @@
 				EB2D5F032C5558BF0043A6EE /* MoviesDateParser.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		EB2D5F062C555F1E0043A6EE /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				EB2D5F072C555F450043A6EE /* MoviesDateParserTests.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		EB2D5F092C5565BA0043A6EE /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				EB2D5F0A2C5565FB0043A6EE /* MovieRepositoryImplTests.swift */,
+				EB2D5F0C2C55796B0043A6EE /* GenreRepositoryImplTests.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		EB2D5F0E2C557C730043A6EE /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				EB2D5F0F2C557DE30043A6EE /* Local */,
+				EB2D5EF52C553D670043A6EE /* Remote */,
+			);
+			path = DataSource;
+			sourceTree = "<group>";
+		};
+		EB2D5F0F2C557DE30043A6EE /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				EB2D5F102C557E4D0043A6EE /* GenreLocalDataSourceImplTests.swift */,
+			);
+			path = Local;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -781,7 +825,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB2D5F0B2C5565FB0043A6EE /* MovieRepositoryImplTests.swift in Sources */,
 				EB2D5EF72C553DA90043A6EE /* MovieServiceApiImplTests.swift in Sources */,
+				EB2D5F082C555F460043A6EE /* MoviesDateParserTests.swift in Sources */,
+				EB2D5F0D2C55796B0043A6EE /* GenreRepositoryImplTests.swift in Sources */,
+				EB2D5F112C557E4D0043A6EE /* GenreLocalDataSourceImplTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
