@@ -141,7 +141,7 @@ class MovieDetailViewController: UIViewController {
             posterImageView.kf.setImage(with: url)
         }
         titleLabel.text = movie.title
-        releaseYearLabel.text = movie.releaseDate
+        releaseYearLabel.text = viewModel.yearStringFrom(movie: movie)
         overviewLabel.text = movie.overview
         viewModel.isFavorite(movie: movie) { [weak self] isFavorite in
             self?.bindFavoriteIcon(isFavorite: isFavorite)
@@ -230,5 +230,9 @@ extension ToggleFavorite {
             }, receiveValue: {
                 completion(newValue)
             }).store(in: &cancellables)
+    }
+
+    func yearStringFrom(movie: Movie) -> String? {
+        return MoviesDateParser.parseYearFrom(stringDate: movie.releaseDate)
     }
 }

@@ -69,6 +69,7 @@
 		EB2D5EFE2C554A250043A6EE /* MockBadMovieResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFC2C554A240043A6EE /* MockBadMovieResponse.json */; };
 		EB2D5F002C5555B90043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
 		EB2D5F012C5555B90043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
+		EB2D5F042C5558BF0043A6EE /* MoviesDateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5F032C5558BF0043A6EE /* MoviesDateParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,6 +152,7 @@
 		EB2D5EF92C5544BD0043A6EE /* MockMovieResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockMovieResponse.json; sourceTree = "<group>"; };
 		EB2D5EFC2C554A240043A6EE /* MockBadMovieResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockBadMovieResponse.json; sourceTree = "<group>"; };
 		EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockGenreResponse.json; sourceTree = "<group>"; };
+		EB2D5F032C5558BF0043A6EE /* MoviesDateParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesDateParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +205,7 @@
 		EB2D5E352C4FF89D0043A6EE /* Movies */ = {
 			isa = PBXGroup;
 			children = (
+				EB2D5F022C55586D0043A6EE /* Utilities */,
 				EB2D5E792C5011690043A6EE /* Data */,
 				EB2D5E7F2C506CB40043A6EE /* Domain */,
 				EB2D5E692C4FF9670043A6EE /* Presentation */,
@@ -543,6 +546,14 @@
 			path = TestData;
 			sourceTree = "<group>";
 		};
+		EB2D5F022C55586D0043A6EE /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				EB2D5F032C5558BF0043A6EE /* MoviesDateParser.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -713,6 +724,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB2D5EEB2C547A3E0043A6EE /* GetGenresByIdsUseCaseImpl.swift in Sources */,
+				EB2D5F042C5558BF0043A6EE /* MoviesDateParser.swift in Sources */,
 				EB2D5E8C2C506F1D0043A6EE /* MovieServiceApiImpl.swift in Sources */,
 				EB2D5EA22C508CFE0043A6EE /* Constants.swift in Sources */,
 				EB2D5E3B2C4FF89D0043A6EE /* ViewController.swift in Sources */,
