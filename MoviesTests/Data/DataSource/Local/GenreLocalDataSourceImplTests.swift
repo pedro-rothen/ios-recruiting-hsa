@@ -73,6 +73,55 @@ final class GenreLocalDataSourceImplTests: XCTestCase {
         let sortedReceivedDomainGenres = receivedDomainGenre?.sorted { $0.id < $1.id }
         XCTAssertEqual(sortedReceivedDomainGenres, domainGenres)
     }
+
+    func testGetGenresByIdsSuccessfully() throws {
+        // Arrange
+        let domainGenres = GenreStub.genres
+        let expectedGenres = Array(
+            GenreStub.genres.shuffled().prefix(upTo: 3).sorted { $0.id < $1.id }
+        )
+        let expectedGenresIds = expectedGenres.map { $0.id }
+
+        // Act
+        let saveExpectation = expectation(description: "Genres are saved to storage successfully")
+        var receivedError: Error?
+        var receivedDomainGenreByIds: [Genre]?
+        genreLocalDataSource
+            .save(genres: domainGenres)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    saveExpectation.fulfill()
+                case .failure(let failure):
+                    receivedError = failure
+                    saveExpectation.fulfill()
+                }
+            }, receiveValue: { })
+            .store(in: &cancellables)
+        waitForExpectations(timeout: 1)
+
+        let fetchByIdsExpectation = expectation(description: "Genres are fetch by ids from storage successfully")
+        genreLocalDataSource
+            .getGenres(by: expectedGenresIds)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    fetchByIdsExpectation.fulfill()
+                case .failure(let failure):
+                    XCTFail(failure.localizedDescription)
+                }
+            }, receiveValue: {
+                receivedDomainGenreByIds = $0.compactMap { $0.toDomain}
+            }).store(in: &cancellables)
+        waitForExpectations(timeout: 1)
+
+        // Assert
+        XCTAssertNil(receivedError)
+        XCTAssertNotNil(receivedDomainGenreByIds)
+
+        let sortedReceivedDomainGenres = receivedDomainGenreByIds?.sorted { $0.id < $1.id }
+        XCTAssertEqual(sortedReceivedDomainGenres, expectedGenres)
+    }
 }
 
 class InMemoryController {
