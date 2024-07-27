@@ -173,6 +173,7 @@ class MovieDetailViewController: UIViewController {
     }
 }
 
+@MainActor
 class MovieDetailViewModel: ToggleFavorite {
     var addFavoriteUseCase: AddFavoriteUseCase
     var deleteFavoriteUseCase: DeleteFavoriteUseCase
@@ -188,6 +189,7 @@ class MovieDetailViewModel: ToggleFavorite {
     }
 }
 
+@MainActor
 protocol ToggleFavorite: AnyObject {
     var addFavoriteUseCase: AddFavoriteUseCase { get }
     var deleteFavoriteUseCase: DeleteFavoriteUseCase { get }

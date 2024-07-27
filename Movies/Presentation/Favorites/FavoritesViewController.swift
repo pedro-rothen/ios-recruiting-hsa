@@ -209,6 +209,7 @@ extension FavoritesViewController: UISearchResultsUpdating {
     }
 }
 
+@MainActor
 class FavoriteViewModel {
     private let getFavoritesUseCase: GetFavoritesUseCase
     private let deleteFavoriteUseCase: DeleteFavoriteUseCase

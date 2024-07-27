@@ -216,6 +216,7 @@ extension MoviesViewController: MovieCollectionViewCellDelegate {
     }
 }
 
+@MainActor
 class MoviesViewModel: ToggleFavorite {
     private let getMoviesUseCase: GetMoviesUseCase
     var addFavoriteUseCase: AddFavoriteUseCase
