@@ -20,7 +20,10 @@ class GenreLocalDataSourceImpl: GenreLocalDataSource {
         return Future { [unowned self] promise in
             do {
                 for genre in genres {
-                    let genreEntity = GenreEntity(context: context)
+                    let fetch = GenreEntity.fetchRequest()
+                    fetch.predicate = NSPredicate(format: "id == %d", genre.id)
+                    let results = try context.fetch(fetch)
+                    let genreEntity = results.first ?? GenreEntity(context: context)
                     genreEntity.update(from: genre)
                 }
                 try context.save()

@@ -59,6 +59,8 @@
 		EB2D5EE12C546C970043A6EE /* FavoriteRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EE02C546C970043A6EE /* FavoriteRepositoryImpl.swift */; };
 		EB2D5EE42C5474830043A6EE /* SyncGenresUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EE32C5474830043A6EE /* SyncGenresUseCase.swift */; };
 		EB2D5EE62C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EE52C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift */; };
+		EB2D5EE92C547A070043A6EE /* GetGenresByIdsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EE82C547A070043A6EE /* GetGenresByIdsUseCase.swift */; };
+		EB2D5EEB2C547A3E0043A6EE /* GetGenresByIdsUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5EEA2C547A3E0043A6EE /* GetGenresByIdsUseCaseImpl.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,6 +136,8 @@
 		EB2D5EE02C546C970043A6EE /* FavoriteRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRepositoryImpl.swift; sourceTree = "<group>"; };
 		EB2D5EE32C5474830043A6EE /* SyncGenresUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncGenresUseCase.swift; sourceTree = "<group>"; };
 		EB2D5EE52C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncGenresUseCaseImpl.swift; sourceTree = "<group>"; };
+		EB2D5EE82C547A070043A6EE /* GetGenresByIdsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGenresByIdsUseCase.swift; sourceTree = "<group>"; };
+		EB2D5EEA2C547A3E0043A6EE /* GetGenresByIdsUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGenresByIdsUseCaseImpl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +322,7 @@
 		EB2D5E932C5084340043A6EE /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				EB2D5EE72C5479E50043A6EE /* GetGenresById */,
 				EB2D5EE22C54745B0043A6EE /* SyncGenres */,
 				EB2D5EC02C51E01E0043A6EE /* IsFavorite */,
 				EB2D5EA02C5086780043A6EE /* DeleteFavorite */,
@@ -477,6 +482,15 @@
 				EB2D5EE52C5474BF0043A6EE /* SyncGenresUseCaseImpl.swift */,
 			);
 			path = SyncGenres;
+			sourceTree = "<group>";
+		};
+		EB2D5EE72C5479E50043A6EE /* GetGenresById */ = {
+			isa = PBXGroup;
+			children = (
+				EB2D5EE82C547A070043A6EE /* GetGenresByIdsUseCase.swift */,
+				EB2D5EEA2C547A3E0043A6EE /* GetGenresByIdsUseCaseImpl.swift */,
+			);
+			path = GetGenresById;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -641,6 +655,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB2D5EEB2C547A3E0043A6EE /* GetGenresByIdsUseCaseImpl.swift in Sources */,
 				EB2D5E8C2C506F1D0043A6EE /* MovieServiceApiImpl.swift in Sources */,
 				EB2D5EA22C508CFE0043A6EE /* Constants.swift in Sources */,
 				EB2D5E3B2C4FF89D0043A6EE /* ViewController.swift in Sources */,
@@ -677,6 +692,7 @@
 				EB2D5EAA2C5091E50043A6EE /* PersistenceController.swift in Sources */,
 				EB2D5E922C5082EF0043A6EE /* MovieRepositoryImpl.swift in Sources */,
 				EB2D5EA62C5090970043A6EE /* FavoriteMovieLocalDataSource.swift in Sources */,
+				EB2D5EE92C547A070043A6EE /* GetGenresByIdsUseCase.swift in Sources */,
 				EB2D5E962C5084670043A6EE /* GetMoviesUseCase.swift in Sources */,
 				EB2D5E742C4FFC720043A6EE /* MoviesViewController.swift in Sources */,
 				EB2D5EDF2C54661C0043A6EE /* GenreLocalDataSourceImpl.swift in Sources */,

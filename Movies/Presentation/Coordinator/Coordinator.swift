@@ -15,10 +15,10 @@ protocol Coordinator {
 extension Coordinator {
     func showMovieDetail(
         movie: Movie,
-        getGenresUseCase: GetGenresUseCase) {
+        getGenresByIdsUseCase: GetGenresByIdsUseCase) {
             let detailViewController = MovieDetailViewController(
                 movie: movie,
-                getGenresUseCase: getGenresUseCase
+                getGenresByIdsUseCase: getGenresByIdsUseCase
             )
             detailViewController.hidesBottomBarWhenPushed = true
             navigationController.pushViewController(

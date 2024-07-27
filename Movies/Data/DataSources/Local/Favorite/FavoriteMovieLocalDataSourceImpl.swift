@@ -31,7 +31,10 @@ class FavoriteMovieLocalDataSourceImpl: FavoriteMovieLocalDataSource {
     func addFavorite(movie: Movie) -> AnyPublisher<Void, Error> {
         return Future { [unowned self] promise in
             do {
-                let favoriteMovie = FavoriteMovieEntity(context: context)
+                let fetchRequest = FavoriteMovieEntity.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "id == %d", movie.id)
+                let result = try context.fetch(fetchRequest)
+                let favoriteMovie = result.first ?? FavoriteMovieEntity(context: context)
                 favoriteMovie.update(from: movie)
                 try context.save()
                 return promise(.success(()))

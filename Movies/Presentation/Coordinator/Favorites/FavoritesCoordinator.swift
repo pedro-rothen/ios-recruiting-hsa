@@ -11,16 +11,16 @@ class FavoritesCoordinator: Coordinator {
     var navigationController: UINavigationController
     let getFavoritesUseCase: GetFavoritesUseCase
     let deleteFavoriteUseCase: DeleteFavoriteUseCase
-    let getGenresUseCase: GetGenresUseCase
+    let getGenresByIdsUseCase: GetGenresByIdsUseCase
 
     init(navigationController: UINavigationController, 
          getFavoritesUseCase: GetFavoritesUseCase,
          deleteFavoriteUseCase: DeleteFavoriteUseCase,
-         getGenresUseCase: GetGenresUseCase) {
+         getGenresByIdsUseCase: GetGenresByIdsUseCase) {
         self.navigationController = navigationController
         self.getFavoritesUseCase = getFavoritesUseCase
         self.deleteFavoriteUseCase = deleteFavoriteUseCase
-        self.getGenresUseCase = getGenresUseCase
+        self.getGenresByIdsUseCase = getGenresByIdsUseCase
     }
 
     func start() {
@@ -37,6 +37,6 @@ class FavoritesCoordinator: Coordinator {
     }
 
     func showMovieDetail(movie: Movie) {
-        showMovieDetail(movie: movie, getGenresUseCase: getGenresUseCase)
+        showMovieDetail(movie: movie, getGenresByIdsUseCase: getGenresByIdsUseCase)
     }
 }

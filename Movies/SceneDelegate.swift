@@ -35,7 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             localDataSource: favoriteMovieLocalDataSource
         )
         let getMoviesUseCase = GetMoviesUseCaseImpl(moviesRepository: movieRepository)
-        let getGenresUseCase = GetGenresUseCaseImpl(genreRepository: genreRepository)
+        let getGenresByIdsUseCase = GetGenresByIdsUseCaseImpl(genreRepository: genreRepository)
 
         /// Another solution would be merge favorite operations in a FavoriteService,
         /// and then call the repository directly. But I already did write those usecases. 
@@ -64,14 +64,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             deleteFavoriteUseCase: deleteFavoriteUseCase,
             addFavoriteUseCase: addFavoriteUseCase,
             isFavoriteUseCase: isFavoriteUseCase,
-            getGenresUseCase: getGenresUseCase
+            getGenresByIdsUseCase: getGenresByIdsUseCase
         )
 
         let favoritesCoordinator = FavoritesCoordinator(
             navigationController: UINavigationController(),
             getFavoritesUseCase: getFavoritesUseCase,
             deleteFavoriteUseCase: deleteFavoriteUseCase,
-            getGenresUseCase: getGenresUseCase
+            getGenresByIdsUseCase: getGenresByIdsUseCase
         )
 
         let navigationController = UINavigationController()
