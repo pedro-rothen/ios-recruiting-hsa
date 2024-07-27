@@ -247,6 +247,7 @@ class MoviesViewModel: ToggleFavorite {
         if movies.isEmpty {
             uiState = .loading
         }
+        isLoadingNextPage = true
         getMoviesUseCase
             .execute(page: page)
             .receive(on: DispatchQueue.main)
@@ -256,13 +257,18 @@ class MoviesViewModel: ToggleFavorite {
                     break
                 case .failure(let failure):
                     print(failure)
-                    self?.uiState = .error
+                    if self?.movies.isEmpty == true {
+                        self?.uiState = .error
+                    } else { // Silent failure for infinite scroll
+                        self?.isLoadingNextPage = false
+                    }
                 }
             }, receiveValue: { [weak self] in
                 self?.uiState = .success
                 self?.movies.append(contentsOf: $0)
                 self?.filteredMovies.append(contentsOf: $0)
                 self?.page += 1
+                self?.isLoadingNextPage = false
             }).store(in: &cancellables)
     }
 
@@ -281,7 +287,6 @@ extension Array {
         return indices.contains(index) ? self[index] : nil
     }
 }
-
 
 class FooterActivityIndicatorView: UICollectionReusableView {
     let activityIndicator = {

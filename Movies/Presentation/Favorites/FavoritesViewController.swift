@@ -168,7 +168,7 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
             let url = URL(string: Constants.MOVIEDBIMAGEURL + "\(movie.posterPath)") {
             cell.posterImageView.kf.setImage(with: url)
             cell.titleLabel.text = movie.title
-            cell.releaseYearLabel.text = movie.releaseDate
+            cell.releaseYearLabel.text = viewModel.yearStringFrom(movie: movie)
             cell.overviewLabel.text = movie.overview
         }
         return cell
@@ -308,5 +308,9 @@ class FavoriteViewModel {
             }
         }
         self.filteredMovies = filteredMovies
+    }
+
+    func yearStringFrom(movie: Movie) -> String? {
+        return MoviesDateParser.parseYearFrom(stringDate: movie.releaseDate)
     }
 }
