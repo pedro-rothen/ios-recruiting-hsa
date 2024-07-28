@@ -137,7 +137,7 @@ class MovieDetailViewController: UIViewController {
     }
 
     func bind(movie: Movie) {
-        if let url = URL(string: Constants.MOVIEDBIMAGEURL + "\(movie.posterPath)") {
+        if let url = MovieUrlProvider.to(movie) {
             posterImageView.kf.setImage(with: url)
         }
         titleLabel.text = movie.title

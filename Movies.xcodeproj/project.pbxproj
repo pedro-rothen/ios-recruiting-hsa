@@ -89,6 +89,10 @@
 		EB2D5FA12C56B4B20043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
 		EB2D5FA22C56B4B30043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
 		EB2D5FA42C56B5D40043A6EE /* GenreStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5FA32C56B5D40043A6EE /* GenreStub.swift */; };
+		EB2D5FBF2C56CB2F0043A6EE /* iOSSnapshotTestCase in Frameworks */ = {isa = PBXBuildFile; productRef = EB2D5FBE2C56CB2F0043A6EE /* iOSSnapshotTestCase */; };
+		EB2D5FC22C56CCBF0043A6EE /* MoviesViewControllerSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5FC12C56CCBF0043A6EE /* MoviesViewControllerSnapshotTests.swift */; };
+		EB2D5FC42C56DA820043A6EE /* MovieUrlProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5FC32C56DA820043A6EE /* MovieUrlProvider.swift */; };
+		EB2D5FC62C56DBC90043A6EE /* movie-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5FC52C56DBC90043A6EE /* movie-placeholder.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -194,6 +198,9 @@
 		EB2D5F952C56A7580043A6EE /* MoviesUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesUnitTests.swift; sourceTree = "<group>"; };
 		EB2D5F982C56AEB90043A6EE /* MovieStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieStub.swift; sourceTree = "<group>"; };
 		EB2D5FA32C56B5D40043A6EE /* GenreStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreStub.swift; sourceTree = "<group>"; };
+		EB2D5FC12C56CCBF0043A6EE /* MoviesViewControllerSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesViewControllerSnapshotTests.swift; sourceTree = "<group>"; };
+		EB2D5FC32C56DA820043A6EE /* MovieUrlProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieUrlProvider.swift; sourceTree = "<group>"; };
+		EB2D5FC52C56DBC90043A6EE /* movie-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie-placeholder.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +230,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB2D5FBF2C56CB2F0043A6EE /* iOSSnapshotTestCase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +240,7 @@
 		EB2D5E2A2C4FF89D0043A6EE = {
 			isa = PBXGroup;
 			children = (
+				EB2D5FC52C56DBC90043A6EE /* movie-placeholder.png */,
 				EB2D5F812C569B9B0043A6EE /* TestPlans */,
 				EB2D5E352C4FF89D0043A6EE /* Movies */,
 				EB2D5EF82C5544570043A6EE /* TestData */,
@@ -608,6 +617,7 @@
 			isa = PBXGroup;
 			children = (
 				EB2D5F032C5558BF0043A6EE /* MoviesDateParser.swift */,
+				EB2D5FC32C56DA820043A6EE /* MovieUrlProvider.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -665,6 +675,7 @@
 		EB2D5F792C569A7A0043A6EE /* MoviesSnapshotTests */ = {
 			isa = PBXGroup;
 			children = (
+				EB2D5FC02C56CCA90043A6EE /* Movies */,
 				EB2D5F7A2C569A7A0043A6EE /* MoviesSnapshotTests.swift */,
 			);
 			path = MoviesSnapshotTests;
@@ -695,6 +706,14 @@
 				EB2D5FA32C56B5D40043A6EE /* GenreStub.swift */,
 			);
 			path = Stub;
+			sourceTree = "<group>";
+		};
+		EB2D5FC02C56CCA90043A6EE /* Movies */ = {
+			isa = PBXGroup;
+			children = (
+				EB2D5FC12C56CCBF0043A6EE /* MoviesViewControllerSnapshotTests.swift */,
+			);
+			path = Movies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -771,6 +790,9 @@
 				EB2D5F7D2C569A7A0043A6EE /* PBXTargetDependency */,
 			);
 			name = MoviesSnapshotTests;
+			packageProductDependencies = (
+				EB2D5FBE2C56CB2F0043A6EE /* iOSSnapshotTestCase */,
+			);
 			productName = MoviesSnapshotTests;
 			productReference = EB2D5F782C569A7A0043A6EE /* MoviesSnapshotTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -814,6 +836,7 @@
 			packageReferences = (
 				EB2D5E7B2C5067C50043A6EE /* XCRemoteSwiftPackageReference "SwiftLint" */,
 				EB2D5EAE2C513DC40043A6EE /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				EB2D5FBD2C56CB2F0043A6EE /* XCRemoteSwiftPackageReference "ios-snapshot-test-case" */,
 			);
 			productRefGroup = EB2D5E342C4FF89D0043A6EE /* Products */;
 			projectDirPath = "";
@@ -839,6 +862,7 @@
 				EB2D5EF22C549D3C0043A6EE /* FavoriteFiltersViewController.xib in Resources */,
 				EB2D5F9D2C56B4AA0043A6EE /* MockMovieResponse.json in Resources */,
 				EB2D5E3E2C4FF89D0043A6EE /* Base in Resources */,
+				EB2D5FC62C56DBC90043A6EE /* movie-placeholder.png in Resources */,
 				EB2D5E732C4FFC720043A6EE /* MoviesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -941,6 +965,7 @@
 				EB2D5E782C4FFC8A0043A6EE /* FavoritesViewController.swift in Sources */,
 				EB2D5E832C506D010043A6EE /* MovieResponse.swift in Sources */,
 				EB2D5EAA2C5091E50043A6EE /* PersistenceController.swift in Sources */,
+				EB2D5FC42C56DA820043A6EE /* MovieUrlProvider.swift in Sources */,
 				EB2D5E922C5082EF0043A6EE /* MovieRepositoryImpl.swift in Sources */,
 				EB2D5EA62C5090970043A6EE /* FavoriteMovieLocalDataSource.swift in Sources */,
 				EB2D5EE92C547A070043A6EE /* GetGenresByIdsUseCase.swift in Sources */,
@@ -985,6 +1010,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB2D5FC22C56CCBF0043A6EE /* MoviesViewControllerSnapshotTests.swift in Sources */,
 				EB2D5F7B2C569A7A0043A6EE /* MoviesSnapshotTests.swift in Sources */,
 				EB2D5F8E2C569EE80043A6EE /* ActiveBuildConfigurationInfo.swift in Sources */,
 			);
@@ -1676,6 +1702,14 @@
 				version = 7.12.0;
 			};
 		};
+		EB2D5FBD2C56CB2F0043A6EE /* XCRemoteSwiftPackageReference "ios-snapshot-test-case" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uber/ios-snapshot-test-case.git";
+			requirement = {
+				kind = exactVersion;
+				version = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1683,6 +1717,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EB2D5EAE2C513DC40043A6EE /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		EB2D5FBE2C56CB2F0043A6EE /* iOSSnapshotTestCase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EB2D5FBD2C56CB2F0043A6EE /* XCRemoteSwiftPackageReference "ios-snapshot-test-case" */;
+			productName = iOSSnapshotTestCase;
 		};
 /* End XCSwiftPackageProductDependency section */
 

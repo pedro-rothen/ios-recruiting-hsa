@@ -133,7 +133,7 @@ extension MoviesViewController: UICollectionViewDataSource,
             return UICollectionViewCell()
         }
         if let movie = viewModel.filteredMovies[safe: indexPath.row],
-            let url = URL(string: Constants.MOVIEDBIMAGEURL + "\(movie.posterPath)") {
+           let url = MovieUrlProvider.to(movie) {
             cell.posterImageView.kf.setImage(with: url)
             cell.titleLabel.text = movie.title
             cell.toggleFavoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)

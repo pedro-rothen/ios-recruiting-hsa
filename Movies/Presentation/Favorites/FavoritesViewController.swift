@@ -165,7 +165,7 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         if let movie = viewModel.filteredMovies?[safe: indexPath.row],
-            let url = URL(string: Constants.MOVIEDBIMAGEURL + "\(movie.posterPath)") {
+            let url = MovieUrlProvider.to(movie) {
             cell.posterImageView.kf.setImage(with: url)
             cell.titleLabel.text = movie.title
             cell.releaseYearLabel.text = viewModel.yearStringFrom(movie: movie)
