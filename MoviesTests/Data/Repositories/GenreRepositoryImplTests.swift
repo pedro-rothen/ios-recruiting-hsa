@@ -49,6 +49,7 @@ final class GenreRepositoryImplTests: XCTestCase {
                 }
         }, receiveValue: { })
         .store(in: &cancellables)
+        waitForExpectations(timeout: 1)
 
         // Act
         var receivedGenres: [Genre]?

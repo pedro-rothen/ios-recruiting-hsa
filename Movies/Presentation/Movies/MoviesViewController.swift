@@ -37,6 +37,9 @@ class MoviesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        buttonRetry.accessibilityIdentifier = "retryButton"
+
         title = "Movies"
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -252,15 +255,17 @@ class MoviesViewModel: ToggleFavorite {
             .execute(page: page)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
+                guard let self else { return }
                 switch completion {
                 case .finished:
                     break
                 case .failure(let failure):
                     print(failure)
-                    if self?.movies.isEmpty == true {
-                        self?.uiState = .error
+                    if movies.isEmpty == true && page == 1 {
+                        uiState = .error
+                        isLoadingNextPage = false
                     } else { // Silent failure for infinite scroll
-                        self?.isLoadingNextPage = false
+                        isLoadingNextPage = false
                     }
                 }
             }, receiveValue: { [weak self] in

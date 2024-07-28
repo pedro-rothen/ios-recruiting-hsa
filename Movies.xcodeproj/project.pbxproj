@@ -88,6 +88,7 @@
 		EB2D5FA02C56B4AF0043A6EE /* MockBadMovieResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFC2C554A240043A6EE /* MockBadMovieResponse.json */; };
 		EB2D5FA12C56B4B20043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
 		EB2D5FA22C56B4B30043A6EE /* MockGenreResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = EB2D5EFF2C5555B90043A6EE /* MockGenreResponse.json */; };
+		EB2D5FA42C56B5D40043A6EE /* GenreStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2D5FA32C56B5D40043A6EE /* GenreStub.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,6 +193,7 @@
 		EB2D5F932C56A66D0043A6EE /* MoviesViewControllerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesViewControllerUITests.swift; sourceTree = "<group>"; };
 		EB2D5F952C56A7580043A6EE /* MoviesUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesUnitTests.swift; sourceTree = "<group>"; };
 		EB2D5F982C56AEB90043A6EE /* MovieStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieStub.swift; sourceTree = "<group>"; };
+		EB2D5FA32C56B5D40043A6EE /* GenreStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreStub.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -690,6 +692,7 @@
 			isa = PBXGroup;
 			children = (
 				EB2D5F982C56AEB90043A6EE /* MovieStub.swift */,
+				EB2D5FA32C56B5D40043A6EE /* GenreStub.swift */,
 			);
 			path = Stub;
 			sourceTree = "<group>";
@@ -917,6 +920,7 @@
 				EB2D5E8A2C506E8E0043A6EE /* Genre.swift in Sources */,
 				EB2D5E9D2C5085720043A6EE /* GetGenresUseCaseImpl.swift in Sources */,
 				EB2D5ED92C5463430043A6EE /* GenreRepositoryImpl.swift in Sources */,
+				EB2D5FA42C56B5D40043A6EE /* GenreStub.swift in Sources */,
 				EB2D5E882C506DBD0043A6EE /* GenreResponse.swift in Sources */,
 				EB2D5EB62C51D07E0043A6EE /* DeleteFavoriteUseCase.swift in Sources */,
 				EB2D5ED22C534E300043A6EE /* FavoritesCoordinator.swift in Sources */,
