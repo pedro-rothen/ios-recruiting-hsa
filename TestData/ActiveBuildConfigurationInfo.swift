@@ -9,7 +9,7 @@ import Foundation
 
 struct ActiveBuildInfo {
     static var name: String {
-        #if UITEST
+        #if UI_TEST
         "UI_TEST"
         #elseif SNAPSHOT_TEST
         "SNAPSHOT_TEST"

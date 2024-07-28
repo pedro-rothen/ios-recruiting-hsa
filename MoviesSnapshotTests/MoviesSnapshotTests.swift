@@ -8,7 +8,7 @@
 import XCTest
 
 final class MoviesSnapshotTests: XCTestCase {
-    func testSuccess() {
+    func testActiveBuildConfiguration() {
         XCTAssertEqual(ActiveBuildInfo.name, "SNAPSHOT_TEST")
     }
 }
