@@ -32,14 +32,6 @@
         "identifier" : "EB2D5E4B2C4FF89F0043A6EE",
         "name" : "MoviesTests"
       }
-    },
-    {
-      "parallelizable" : true,
-      "target" : {
-        "containerPath" : "container:Movies.xcodeproj",
-        "identifier" : "EB2D5E552C4FF89F0043A6EE",
-        "name" : "MoviesUITests"
-      }
     }
   ],
   "version" : 1

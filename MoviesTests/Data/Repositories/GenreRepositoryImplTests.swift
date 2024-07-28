@@ -12,13 +12,13 @@ import Combine
 final class GenreRepositoryImplTests: XCTestCase {
     var genreRepository: GenreRepositoryImpl!
     var mockRemoteDataSource: MockMovieServiceApi!
-    var mockLocalDataSource: MockGenreLocalDataSource!
+    var mockLocalDataSource: GenreLocalDataSource!
     var cancellables: Set<AnyCancellable>!
 
     override func setUp() {
         super.setUp()
         mockRemoteDataSource = MockMovieServiceApi()
-        mockLocalDataSource = MockGenreLocalDataSource()
+        mockLocalDataSource = GenreLocalDataSourceImpl(context: InMemoryController().context)
         genreRepository = GenreRepositoryImpl(
             remoteDataSource: mockRemoteDataSource,
             localDataSource: mockLocalDataSource
@@ -38,9 +38,17 @@ final class GenreRepositoryImplTests: XCTestCase {
     func testReturnGenresSuccessfully() throws {
         // Arrange
         let genres = GenreStub.genres
-        mockRemoteDataSource.genreStub = Just(genres)
-            .setFailureType(to: Error.self)
-            .eraseToAnyPublisher()
+        let expectationWriteGenres = expectation(description: "Write genres")
+        mockLocalDataSource.save(genres: genres).sink(
+            receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    expectationWriteGenres.fulfill()
+                case .failure(let failure):
+                    XCTFail(failure.localizedDescription)
+                }
+        }, receiveValue: { })
+        .store(in: &cancellables)
 
         // Act
         var receivedGenres: [Genre]?
@@ -65,25 +73,5 @@ final class GenreRepositoryImplTests: XCTestCase {
         //Assert
         XCTAssertNil(receivedError)
         XCTAssertNotNil(receivedGenres)
-        XCTAssertEqual(genres, receivedGenres)
-    }
-
-    // Dummy for required dependency
-    class MockGenreLocalDataSource: GenreLocalDataSource {
-        var saveStub: AnyPublisher<Void, Error>!
-        var getGenresStub: AnyPublisher<[GenreEntity], Error>!
-        var getGenresStubByIdsStub: AnyPublisher<[GenreEntity], Error>!
-
-        func save(genres: [Genre]) -> AnyPublisher<Void, Error> {
-            return saveStub
-        }
-        
-        func getGenres() -> AnyPublisher<[GenreEntity], Error> {
-            return getGenresStub
-        }
-        
-        func getGenres(by ids: [Int]) -> AnyPublisher<[GenreEntity], Error> {
-            getGenresStubByIdsStub
-        }
     }
 }

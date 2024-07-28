@@ -24,51 +24,16 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "UITest"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:TestPlans/UnitTestPlan.xctestplan"
+            reference = "container:TestPlans/UITestPlan.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
-      <Testables>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EB2D5E4B2C4FF89F0043A6EE"
-               BuildableName = "MoviesTests.xctest"
-               BlueprintName = "MoviesTests"
-               ReferencedContainer = "container:Movies.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EB2D5E552C4FF89F0043A6EE"
-               BuildableName = "MoviesUITests.xctest"
-               BlueprintName = "MoviesUITests"
-               ReferencedContainer = "container:Movies.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EB2D5F772C569A7A0043A6EE"
-               BuildableName = "MoviesSnapshotTests.xctest"
-               BlueprintName = "MoviesSnapshotTests"
-               ReferencedContainer = "container:Movies.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
