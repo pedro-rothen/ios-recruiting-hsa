@@ -96,8 +96,6 @@ class MoviesViewController: UIViewController {
                     activityIndicator.isHidden = false
                 case .error:
                     buttonRetry.isHidden = false
-                case .noResults:
-                    labelNoResults.isHidden = false
                 case .success:
                     moviesCollectionView.isHidden = false
                 }
@@ -106,8 +104,9 @@ class MoviesViewController: UIViewController {
             .$filteredMovies
             .dropFirst()
             .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] in
                 self?.moviesCollectionView.reloadData()
+                self?.labelNoResults.isHidden = $0.isEmpty == false
             }.store(in: &cancellables)
     }
 
@@ -284,7 +283,7 @@ class MoviesViewModel: ToggleFavorite {
 }
 
 enum MovieUiState {
-    case idle, loading, error, noResults, success
+    case idle, loading, error, success
 }
 
 extension Array {
