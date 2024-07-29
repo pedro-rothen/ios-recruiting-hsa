@@ -22,7 +22,7 @@ final class MoviesViewControllerUITests: XCTestCase {
 
         // Assert
         let activityIndicator = app.activityIndicators.firstMatch
-        XCTAssert(activityIndicator.exists)
+        XCTAssert(activityIndicator.waitForExistence(timeout: 5))
     }
 
     func testRetryButtonFlow() {
