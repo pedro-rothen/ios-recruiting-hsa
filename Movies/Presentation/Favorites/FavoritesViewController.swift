@@ -194,7 +194,7 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let movie = viewModel.filteredMovies?[indexPath.row] {
+        if let movie = viewModel.filteredMovies?[safe: indexPath.row] {
             coordinator?.showMovieDetail(movie: movie)
         }
     }
