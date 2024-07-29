@@ -21,8 +21,8 @@ final class MoviesViewControllerUITests: XCTestCase {
         app.launch()
 
         // Assert
-        let activityIndicator = app.activityIndicators.firstMatch
-        XCTAssert(activityIndicator.waitForExistence(timeout: 5))
+        let activityIndicator = app.activityIndicators["activityIndicator"]
+        XCTAssert(activityIndicator.exists)
     }
 
     func testRetryButtonFlow() {

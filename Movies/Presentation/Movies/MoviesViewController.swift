@@ -39,6 +39,7 @@ class MoviesViewController: UIViewController {
         super.viewDidLoad()
 
         buttonRetry.accessibilityIdentifier = "retryButton"
+        activityIndicator.accessibilityIdentifier = "activityIndicator"
 
         title = "Movies"
         searchController.searchResultsUpdater = self
